@@ -7,29 +7,29 @@ This is a temporary script file.
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os
-import matplotlib.image as mpimg
-import cv2 # pip install opencv-python
+#import matplotlib.image as mpimg
+#import cv2 # pip install opencv-python
 import PIL
 from PIL import Image
-import IPython.display as display
+#import IPython.display as display
 import skimage
-import io
+#import io
 import random
-import sklearn
+import numpy as np
+#import sklearn
 from sklearn.model_selection import train_test_split
+from sklearn.decomposition import PCA
 
 # TensorFlow and tf.keras
-import tensorflow as tf
-from tensorflow import keras
+#import tensorflow as tf
+#from tensorflow import keras
 
 # Helper libraries
-import numpy as np
+#import numpy as np
 import matplotlib.pyplot as plt
 
 felis_catus_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\felis_catus\\"
 populus_trichocarpa_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\populus_trichocarpa\\"
-
-
 
 
 # dictionary of labels to species
@@ -57,8 +57,62 @@ combined_samples_and_lists = list(zip(all_samples, all_labels))
 random.shuffle(combined_samples_and_lists)
 all_samples, all_labels = zip(*combined_samples_and_lists)
 
+
+# split images into R, G, B floats
+resize_int = 250
+
+def reshape_image_and_convert_to_float(image_path):
+    img = Image.open(image_path)
+    img = img.resize((resize_int, resize_int), PIL.Image.ANTIALIAS)
+    return skimage.img_as_float(img)
+
+all_images = []
+
+for sample in all_samples:
+    all_images.append(reshape_image_and_convert_to_float(sample))
+
+all_images_R = [] 
+all_images_G = [] 
+all_images_B = [] 
+
+ct = 0
+for image in all_images:
+    temp_R = [[0 for i in range(resize_int)] for j in range(resize_int)]
+    temp_G = [[0 for i in range(resize_int)] for j in range(resize_int)]
+    temp_B = [[0 for i in range(resize_int)] for j in range(resize_int)]
+    for r in range(len(image)):
+        row = image[r]
+        for p in range(len(row)):
+            pixel = row[p]
+            temp_R[r][p] = pixel[0] 
+            temp_G[r][p] = pixel[1]
+            temp_B[r][p] = pixel[2]
+    all_images_R.append(temp_R)
+    all_images_G.append(temp_G)
+    all_images_B.append(temp_B)
+
+# PCA
+all_images_flattened_R = []
+for image in all_images_R:
+    all_images_flattened_R.append(np.array(image).flatten())
+  
+all_images_flattened_G = []
+for image in all_images_G:
+    all_images_flattened_G.append(np.array(image).flatten())
+    
+all_images_flattened_B = []
+for image in all_images_B:
+    all_images_flattened_B.append(np.array(image).flatten())
+    
+pca = PCA(n_components=5)
+principalComponents_R = pca.fit(all_images_flattened_R)
+principalComponents_G = pca.fit(all_images_flattened_G)
+principalComponents_B = pca.fit(all_images_flattened_B)
+
+### THIS IS WHERE SAMI STOPPED
+
 # split into test and train data
-X_train, X_test, train_labels, test_labels = train_test_split(all_samples, all_labels, test_size = 0.2)
+X_train, X_test, train_labels, test_labels = train_test_split(all_images, all_labels, test_size = 0.2)
 
 print("Done splitting")
 
@@ -66,11 +120,6 @@ print("Done splitting")
 # convert filepaths to images
 train_images = []
 test_images = []
-
-def reshape_image_and_convert_to_float(image_path):
-    img = Image.open(image_path)
-    img = img.resize((250, 250), PIL.Image.ANTIALIAS)
-    return skimage.img_as_float(img)
 
 for image_path in X_train:
    # train_images.append(skimage.img_as_float(Image.open(image_path)))
@@ -100,25 +149,27 @@ plt.show()
 
 
 ## FIGURE OUT SHAPE OF IMAGES!
-model = keras.Sequential([
-    keras.layers.Flatten(input_shape=(250, 250,3)),
-    keras.layers.Dense(128, activation='relu'),
-    keras.layers.Dense(10, activation='softmax')
-])
-    
-model.compile(optimizer='adam',
-              loss='sparse_categorical_crossentropy',
-              metrics=['accuracy'])
-
-print("About to fit")
-
-
-model.fit(np.array(train_images), np.array(train_labels), epochs=10)
-
-test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
-
-print('\nTest accuracy:', test_acc)
-
+# =============================================================================
+# model = keras.Sequential([
+#     keras.layers.Flatten(input_shape=(250, 250,3)),
+#     keras.layers.Dense(128, activation='relu'),
+#     keras.layers.Dense(10, activation='softmax')
+# ])
+#     
+# model.compile(optimizer='adam',
+#               loss='sparse_categorical_crossentropy',
+#               metrics=['accuracy'])
+# 
+# print("About to fit")
+# 
+# 
+# model.fit(np.array(train_images), np.array(train_labels), epochs=10)
+# 
+# test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
+# 
+# print('\nTest accuracy:', test_acc)
+# 
+# =============================================================================
 
 # cat_zero = Image.open(all_felis_catus[90])
 # display.display(cat_zero)
