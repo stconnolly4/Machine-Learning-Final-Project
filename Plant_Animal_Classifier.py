@@ -57,7 +57,6 @@ combined_samples_and_lists = list(zip(all_samples, all_labels))
 random.shuffle(combined_samples_and_lists)
 all_samples, all_labels = zip(*combined_samples_and_lists)
 
-
 # split images into R, G, B floats
 resize_int = 250
 
@@ -103,8 +102,10 @@ for image in all_images_G:
 all_images_flattened_B = []
 for image in all_images_B:
     all_images_flattened_B.append(np.array(image).flatten())
-    
-pca = PCA(n_components=5)
+  
+number_of_components = 10
+
+pca = PCA(n_components=number_of_components)
 principalComponents_R = pca.fit(all_images_flattened_R)
 principalComponents_G = pca.fit(all_images_flattened_G)
 principalComponents_B = pca.fit(all_images_flattened_B)
@@ -129,77 +130,54 @@ X_train_R, X_train_G, X_train_B = zip(*X_train_RGB)
 X_test_R, X_test_G, X_test_B = zip(*X_test_RGB)
 
 # train 3 models
+# R
 model_R = keras.Sequential([
-     keras.layers.Flatten(input_shape=(250, 5)),
+     keras.layers.Flatten(input_shape=(resize_int, number_of_components)),
      keras.layers.Dense(128, activation='relu'),
      keras.layers.Dense(10, activation='softmax')
  ])
-     
+    
 model_R.compile(optimizer='adam',
                loss='sparse_categorical_crossentropy',
                metrics=['accuracy'])
  
 model_R.fit(np.array(X_train_R), np.array(train_labels), epochs=10)
+
+# G
+model_G = keras.Sequential([
+     keras.layers.Flatten(input_shape=(resize_int, number_of_components)),
+     keras.layers.Dense(128, activation='relu'),
+     keras.layers.Dense(10, activation='softmax')
+ ])
+    
+model_G.compile(optimizer='adam',
+               loss='sparse_categorical_crossentropy',
+               metrics=['accuracy'])
  
-test_loss, test_acc = model_R.evaluate(np.array(X_test_R), np.array(test_labels), verbose=2)
+model_G.fit(np.array(X_train_G), np.array(train_labels), epochs=10)
+
+# B
+model_B = keras.Sequential([
+     keras.layers.Flatten(input_shape=(resize_int, number_of_components)),
+     keras.layers.Dense(128, activation='relu'),
+     keras.layers.Dense(10, activation='softmax')
+ ])
+    
+model_B.compile(optimizer='adam',
+               loss='sparse_categorical_crossentropy',
+               metrics=['accuracy'])
  
-print('\nTest accuracy:', test_acc)
+model_B.fit(np.array(X_train_R), np.array(train_labels), epochs=10)
+ 
+# test
+test_loss_R, test_acc_R = model_R.evaluate(np.array(X_test_R), np.array(test_labels), verbose=2)
+test_loss_G, test_acc_G = model_R.evaluate(np.array(X_test_G), np.array(test_labels), verbose=2)
+test_loss_B, test_acc_B = model_B.evaluate(np.array(X_test_B), np.array(test_labels), verbose=2)
 
+print('\nTest accuracy R:', test_acc_R)
+print('\nTest accuracy G:', test_acc_G)
+print('\nTest accuracy B:', test_acc_B)
 
-# =============================================================================
-# # convert filepaths to images
-# train_images = []
-# test_images = []
-# 
-# for image_path in X_train:
-#    # train_images.append(skimage.img_as_float(Image.open(image_path)))
-#    train_images.append(reshape_image_and_convert_to_float(image_path))
-# 
-# print("Done converting trainings")
-# 
-# for image_path in X_test:
-# #    test_images.append(skimage.img_as_float(Image.open(image_path)))
-#     test_images.append(reshape_image_and_convert_to_float(image_path))
-# 
-# 
-# print("Done converting testings")
-# 
-# # plot to test
-# 
-# plt.figure(figsize=(10,10))
-# for i in range(25):
-#     plt.subplot(5,5,i+1)
-#     plt.xticks([])
-#     plt.yticks([])
-#     plt.grid(False)
-#     plt.imshow(train_images[i], cmap=plt.cm.binary)
-#     plt.xlabel(class_names[train_labels[i]])
-# plt.show()
-# 
-# =============================================================================
-
-
-## FIGURE OUT SHAPE OF IMAGES!
-# =============================================================================
-# model = keras.Sequential([
-#     keras.layers.Flatten(input_shape=(250, 250,3)),
-#     keras.layers.Dense(128, activation='relu'),
-#     keras.layers.Dense(10, activation='softmax')
-# ])
-#     
-# model.compile(optimizer='adam',
-#               loss='sparse_categorical_crossentropy',
-#               metrics=['accuracy'])
-# 
-# print("About to fit")
-# 
-# 
-# model.fit(np.array(train_images), np.array(train_labels), epochs=10)
-# 
-# test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
-# 
-# print('\nTest accuracy:', test_acc)
-# 
 # =============================================================================
 
 # cat_zero = Image.open(all_felis_catus[90])
