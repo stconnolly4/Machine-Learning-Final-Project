@@ -21,8 +21,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA
 
 # TensorFlow and tf.keras
-#import tensorflow as tf
-#from tensorflow import keras
+import tensorflow as tf
+from tensorflow import keras
 
 # Helper libraries
 #import numpy as np
@@ -109,43 +109,74 @@ principalComponents_R = pca.fit(all_images_flattened_R)
 principalComponents_G = pca.fit(all_images_flattened_G)
 principalComponents_B = pca.fit(all_images_flattened_B)
 
-### THIS IS WHERE SAMI STOPPED
+# Convert all the images to PCA versions of themselves
+all_images_principal_components_R = []
+for image in all_images_R:
+    all_images_principal_components_R.append(principalComponents_R.fit_transform(image))
+
+all_images_principal_components_G = []
+for image in all_images_G:
+    all_images_principal_components_G.append(principalComponents_G.fit_transform(image))
+    
+all_images_principal_components_B = []
+for image in all_images_B:
+    all_images_principal_components_B.append(principalComponents_B.fit_transform(image))
 
 # split into test and train data
-X_train, X_test, train_labels, test_labels = train_test_split(all_images, all_labels, test_size = 0.2)
+combined_RGB = list(zip(all_images_principal_components_R, all_images_principal_components_G, all_images_principal_components_B))
+X_train_RGB, X_test_RGB, train_labels, test_labels = train_test_split(combined_RGB, all_labels, test_size = 0.2)
+X_train_R, X_train_G, X_train_B = zip(*X_train_RGB)
+X_test_R, X_test_G, X_test_B = zip(*X_test_RGB)
 
-print("Done splitting")
+# train 3 models
+model_R = keras.Sequential([
+     keras.layers.Flatten(input_shape=(250, 5)),
+     keras.layers.Dense(128, activation='relu'),
+     keras.layers.Dense(10, activation='softmax')
+ ])
+     
+model_R.compile(optimizer='adam',
+               loss='sparse_categorical_crossentropy',
+               metrics=['accuracy'])
+ 
+model_R.fit(np.array(X_train_R), np.array(train_labels), epochs=10)
+ 
+test_loss, test_acc = model_R.evaluate(np.array(X_test_R), np.array(test_labels), verbose=2)
+ 
+print('\nTest accuracy:', test_acc)
 
 
-# convert filepaths to images
-train_images = []
-test_images = []
-
-for image_path in X_train:
-   # train_images.append(skimage.img_as_float(Image.open(image_path)))
-   train_images.append(reshape_image_and_convert_to_float(image_path))
-
-print("Done converting trainings")
-
-for image_path in X_test:
-#    test_images.append(skimage.img_as_float(Image.open(image_path)))
-    test_images.append(reshape_image_and_convert_to_float(image_path))
-
-
-print("Done converting testings")
-
-# plot to test
-
-plt.figure(figsize=(10,10))
-for i in range(25):
-    plt.subplot(5,5,i+1)
-    plt.xticks([])
-    plt.yticks([])
-    plt.grid(False)
-    plt.imshow(train_images[i], cmap=plt.cm.binary)
-    plt.xlabel(class_names[train_labels[i]])
-plt.show()
-
+# =============================================================================
+# # convert filepaths to images
+# train_images = []
+# test_images = []
+# 
+# for image_path in X_train:
+#    # train_images.append(skimage.img_as_float(Image.open(image_path)))
+#    train_images.append(reshape_image_and_convert_to_float(image_path))
+# 
+# print("Done converting trainings")
+# 
+# for image_path in X_test:
+# #    test_images.append(skimage.img_as_float(Image.open(image_path)))
+#     test_images.append(reshape_image_and_convert_to_float(image_path))
+# 
+# 
+# print("Done converting testings")
+# 
+# # plot to test
+# 
+# plt.figure(figsize=(10,10))
+# for i in range(25):
+#     plt.subplot(5,5,i+1)
+#     plt.xticks([])
+#     plt.yticks([])
+#     plt.grid(False)
+#     plt.imshow(train_images[i], cmap=plt.cm.binary)
+#     plt.xlabel(class_names[train_labels[i]])
+# plt.show()
+# 
+# =============================================================================
 
 
 ## FIGURE OUT SHAPE OF IMAGES!
