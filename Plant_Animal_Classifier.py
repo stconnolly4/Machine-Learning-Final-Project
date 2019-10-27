@@ -76,9 +76,12 @@ all_images_B = []
 
 ct = 0
 for image in all_images:
-    temp_R = [[0 for i in range(resize_int)] for j in range(resize_int)]
-    temp_G = [[0 for i in range(resize_int)] for j in range(resize_int)]
-    temp_B = [[0 for i in range(resize_int)] for j in range(resize_int)]
+#    temp_R = [[0 for i in range(resize_int)] for j in range(resize_int)]
+#    temp_G = [[0 for i in range(resize_int)] for j in range(resize_int)]
+#    temp_B = [[0 for i in range(resize_int)] for j in range(resize_int)]
+    temp_R = np.zeros((resize_int, resize_int))
+    temp_G = np.zeros((resize_int, resize_int))
+    temp_B = np.zeros((resize_int, resize_int))
     for r in range(len(image)):
         row = image[r]
         for p in range(len(row)):
@@ -90,49 +93,66 @@ for image in all_images:
     all_images_G.append(temp_G)
     all_images_B.append(temp_B)
 
-# PCA
-all_images_flattened_R = []
-for image in all_images_R:
-    all_images_flattened_R.append(np.array(image).flatten())
-  
-all_images_flattened_G = []
-for image in all_images_G:
-    all_images_flattened_G.append(np.array(image).flatten())
-    
-all_images_flattened_B = []
-for image in all_images_B:
-    all_images_flattened_B.append(np.array(image).flatten())
-  
-number_of_components = 10
+## PCA
+#all_images_flattened_R = np.zeros((len(all_images), resize_int*resize_int))
+#for i in range(len(all_images_R)):
+#    image = all_images_R[i]
+#    all_images_flattened_R[i] = np.array(image).flatten()
+#  
+#all_images_flattened_G = []
+#for image in all_images_G:
+#    all_images_flattened_G.append(np.array(image).flatten())
+#    
+#all_images_flattened_B = []
+#for image in all_images_B:
+#    all_images_flattened_B.append(np.array(image).flatten())
+#  
+#number_of_components = 5
+#
+#pca_R = PCA(n_components=number_of_components)
+#pca_G = PCA(n_components=number_of_components)
+#pca_B = PCA(n_components=number_of_components)
+#
+#pca_R.fit(all_images_flattened_R)
+#pca_G.fit(all_images_flattened_G)
+#pca_B.fit(all_images_flattened_B)
+#
+#
+##pca = PCA(n_components=number_of_components)
+##principalComponents_R = pca.fit(all_images_flattened_R)
+##principalComponents_G = pca.fit(all_images_flattened_G)
+##principalComponents_B = pca.fit(all_images_flattened_B)
+#
+## Convert all the images to PCA versions of themselves
+#all_images_principal_components_R = []
+#for image in all_images_R:
+#    all_images_principal_components_R.append(pca_R.fit_transform(image))
+#
+#all_images_principal_components_G = []
+#for image in all_images_G:
+#    all_images_principal_components_G.append(pca_R.fit_transform(image))
+#    
+#all_images_principal_components_B = []
+#for image in all_images_B:
+#    all_images_principal_components_B.append(pca_B.fit_transform(image))
+#
+## split into test and train data
+#combined_RGB = list(zip(all_images_principal_components_R, all_images_principal_components_G, all_images_principal_components_B))
+#X_train_RGB, X_test_RGB, train_labels, test_labels = train_test_split(combined_RGB, all_labels, test_size = 0.2)
+#X_train_R, X_train_G, X_train_B = zip(*X_train_RGB)
+#X_test_R, X_test_G, X_test_B = zip(*X_test_RGB)
 
-pca = PCA(n_components=number_of_components)
-principalComponents_R = pca.fit(all_images_flattened_R)
-principalComponents_G = pca.fit(all_images_flattened_G)
-principalComponents_B = pca.fit(all_images_flattened_B)
 
-# Convert all the images to PCA versions of themselves
-all_images_principal_components_R = []
-for image in all_images_R:
-    all_images_principal_components_R.append(principalComponents_R.fit_transform(image))
-
-all_images_principal_components_G = []
-for image in all_images_G:
-    all_images_principal_components_G.append(principalComponents_G.fit_transform(image))
-    
-all_images_principal_components_B = []
-for image in all_images_B:
-    all_images_principal_components_B.append(principalComponents_B.fit_transform(image))
-
-# split into test and train data
-combined_RGB = list(zip(all_images_principal_components_R, all_images_principal_components_G, all_images_principal_components_B))
+combined_RGB = list(zip(all_images_R, all_images_G, all_images_B))
 X_train_RGB, X_test_RGB, train_labels, test_labels = train_test_split(combined_RGB, all_labels, test_size = 0.2)
 X_train_R, X_train_G, X_train_B = zip(*X_train_RGB)
 X_test_R, X_test_G, X_test_B = zip(*X_test_RGB)
 
+
 # train 3 models
 # R
 model_R = keras.Sequential([
-     keras.layers.Flatten(input_shape=(resize_int, number_of_components)),
+     keras.layers.Flatten(input_shape=(resize_int, resize_int)),#number_of_components)),
      keras.layers.Dense(128, activation='relu'),
      keras.layers.Dense(10, activation='softmax')
  ])
@@ -145,7 +165,7 @@ model_R.fit(np.array(X_train_R), np.array(train_labels), epochs=10)
 
 # G
 model_G = keras.Sequential([
-     keras.layers.Flatten(input_shape=(resize_int, number_of_components)),
+     keras.layers.Flatten(input_shape=(resize_int, resize_int)),
      keras.layers.Dense(128, activation='relu'),
      keras.layers.Dense(10, activation='softmax')
  ])
@@ -158,7 +178,7 @@ model_G.fit(np.array(X_train_G), np.array(train_labels), epochs=10)
 
 # B
 model_B = keras.Sequential([
-     keras.layers.Flatten(input_shape=(resize_int, number_of_components)),
+     keras.layers.Flatten(input_shape=(resize_int, resize_int)),
      keras.layers.Dense(128, activation='relu'),
      keras.layers.Dense(10, activation='softmax')
  ])
