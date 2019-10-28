@@ -93,37 +93,37 @@ for image in all_images:
     all_images_G.append(temp_G)
     all_images_B.append(temp_B)
 
-## PCA
-#all_images_flattened_R = np.zeros((len(all_images), resize_int*resize_int))
-#for i in range(len(all_images_R)):
-#    image = all_images_R[i]
-#    all_images_flattened_R[i] = np.array(image).flatten()
-#  
-#all_images_flattened_G = []
-#for image in all_images_G:
-#    all_images_flattened_G.append(np.array(image).flatten())
-#    
-#all_images_flattened_B = []
-#for image in all_images_B:
-#    all_images_flattened_B.append(np.array(image).flatten())
-#  
-#number_of_components = 5
-#
-#pca_R = PCA(n_components=number_of_components)
-#pca_G = PCA(n_components=number_of_components)
-#pca_B = PCA(n_components=number_of_components)
-#
-#pca_R.fit(all_images_flattened_R)
-#pca_G.fit(all_images_flattened_G)
-#pca_B.fit(all_images_flattened_B)
-#
-#
-##pca = PCA(n_components=number_of_components)
-##principalComponents_R = pca.fit(all_images_flattened_R)
-##principalComponents_G = pca.fit(all_images_flattened_G)
-##principalComponents_B = pca.fit(all_images_flattened_B)
-#
-## Convert all the images to PCA versions of themselves
+# PCA
+all_images_flattened_R = np.zeros((len(all_images), resize_int*resize_int))
+for i in range(len(all_images_R)):
+    image = all_images_R[i]
+    all_images_flattened_R[i] = np.array(image).flatten()
+  
+all_images_flattened_G = []
+for image in all_images_G:
+    all_images_flattened_G.append(np.array(image).flatten())
+    
+all_images_flattened_B = []
+for image in all_images_B:
+    all_images_flattened_B.append(np.array(image).flatten())
+  
+number_of_components = 100
+
+pca_R = PCA(n_components=number_of_components)
+pca_G = PCA(n_components=number_of_components)
+pca_B = PCA(n_components=number_of_components)
+
+all_images_principal_components_R = pca_R.fit_transform(all_images_flattened_R)
+all_images_principal_components_G = pca_G.fit_transform(all_images_flattened_G)
+all_images_principal_components_B = pca_B.fit_transform(all_images_flattened_B)
+
+
+#pca = PCA(n_components=number_of_components)
+#principalComponents_R = pca.fit(all_images_flattened_R)
+#principalComponents_G = pca.fit(all_images_flattened_G)
+#principalComponents_B = pca.fit(all_images_flattened_B)
+
+# Convert all the images to PCA versions of themselves
 #all_images_principal_components_R = []
 #for image in all_images_R:
 #    all_images_principal_components_R.append(pca_R.fit_transform(image))
@@ -135,68 +135,100 @@ for image in all_images:
 #all_images_principal_components_B = []
 #for image in all_images_B:
 #    all_images_principal_components_B.append(pca_B.fit_transform(image))
-#
+
 ## split into test and train data
-#combined_RGB = list(zip(all_images_principal_components_R, all_images_principal_components_G, all_images_principal_components_B))
-#X_train_RGB, X_test_RGB, train_labels, test_labels = train_test_split(combined_RGB, all_labels, test_size = 0.2)
-#X_train_R, X_train_G, X_train_B = zip(*X_train_RGB)
-#X_test_R, X_test_G, X_test_B = zip(*X_test_RGB)
-
-
-combined_RGB = list(zip(all_images_R, all_images_G, all_images_B))
+combined_RGB = list(zip(all_images_principal_components_R, all_images_principal_components_G, all_images_principal_components_B))
 X_train_RGB, X_test_RGB, train_labels, test_labels = train_test_split(combined_RGB, all_labels, test_size = 0.2)
 X_train_R, X_train_G, X_train_B = zip(*X_train_RGB)
 X_test_R, X_test_G, X_test_B = zip(*X_test_RGB)
 
 
-# train 3 models
-# R
-model_R = keras.Sequential([
-     keras.layers.Flatten(input_shape=(resize_int, resize_int)),#number_of_components)),
-     keras.layers.Dense(128, activation='relu'),
-     keras.layers.Dense(10, activation='softmax')
- ])
+#combined_RGB = list(zip(all_images_R, all_images_G, all_images_B))
+#X_train_RGB, X_test_RGB, train_labels, test_labels = train_test_split(combined_RGB, all_labels, test_size = 0.2)
+#X_train_R, X_train_G, X_train_B = zip(*X_train_RGB)
+#X_test_R, X_test_G, X_test_B = zip(*X_test_RGB)
+
+
+X_train = []
+for i in range(len(X_train_R)):
+    X_train.append(np.concatenate((X_train_R[i], X_train_G[i], X_train_B[i])))
+
+X_test = []
+for i in range(len(X_test_R)):
+    X_test.append(np.concatenate((X_test_R[i], X_test_G[i], X_test_B[i])))
+
+
+
+# train model
+model = keras.Sequential([
+    keras.layers.Dense(128, activation='relu'),
+    keras.layers.Dense(10, activation='softmax')
+])
     
-model_R.compile(optimizer='adam',
+model.compile(optimizer='adam',
                loss='sparse_categorical_crossentropy',
                metrics=['accuracy'])
  
-model_R.fit(np.array(X_train_R), np.array(train_labels), epochs=10)
+model.fit(np.array(X_train), np.array(train_labels), epochs=10)
 
-# G
-model_G = keras.Sequential([
-     keras.layers.Flatten(input_shape=(resize_int, resize_int)),
-     keras.layers.Dense(128, activation='relu'),
-     keras.layers.Dense(10, activation='softmax')
- ])
-    
-model_G.compile(optimizer='adam',
-               loss='sparse_categorical_crossentropy',
-               metrics=['accuracy'])
- 
-model_G.fit(np.array(X_train_G), np.array(train_labels), epochs=10)
+test_loss, test_acc = model.evaluate(np.array(X_test), np.array(test_labels), verbose=2)
 
-# B
-model_B = keras.Sequential([
-     keras.layers.Flatten(input_shape=(resize_int, resize_int)),
-     keras.layers.Dense(128, activation='relu'),
-     keras.layers.Dense(10, activation='softmax')
- ])
-    
-model_B.compile(optimizer='adam',
-               loss='sparse_categorical_crossentropy',
-               metrics=['accuracy'])
- 
-model_B.fit(np.array(X_train_R), np.array(train_labels), epochs=10)
- 
-# test
-test_loss_R, test_acc_R = model_R.evaluate(np.array(X_test_R), np.array(test_labels), verbose=2)
-test_loss_G, test_acc_G = model_R.evaluate(np.array(X_test_G), np.array(test_labels), verbose=2)
-test_loss_B, test_acc_B = model_B.evaluate(np.array(X_test_B), np.array(test_labels), verbose=2)
+print('\nTest accuracy:', test_acc)
 
-print('\nTest accuracy R:', test_acc_R)
-print('\nTest accuracy G:', test_acc_G)
-print('\nTest accuracy B:', test_acc_B)
+
+
+## train 3 models
+## R
+#model_R = keras.Sequential([
+#    keras.layers.Dense(128, activation='relu'),
+#    keras.layers.Dense(10, activation='softmax')
+#])
+#    
+#model_R.compile(optimizer='adam',
+#               loss='sparse_categorical_crossentropy',
+#               metrics=['accuracy'])
+# 
+#model_R.fit(np.array(X_train_R), np.array(train_labels), epochs=10)
+#
+## G
+##model_G = keras.Sequential([
+##     keras.layers.Flatten(input_shape=(resize_int, resize_int)),
+##     keras.layers.Dense(128, activation='relu'),
+##     keras.layers.Dense(10, activation='softmax')
+## ])
+#    
+#model_G = keras.Sequential([
+#    keras.layers.Dense(128, activation='relu'),
+#    keras.layers.Dense(10, activation='softmax')
+#])
+#
+#    
+#model_G.compile(optimizer='adam',
+#               loss='sparse_categorical_crossentropy',
+#               metrics=['accuracy'])
+# 
+#model_G.fit(np.array(X_train_G), np.array(train_labels), epochs=10)
+#
+## B
+#model_B = keras.Sequential([
+#    keras.layers.Dense(128, activation='relu'),
+#    keras.layers.Dense(10, activation='softmax')
+#])
+#    
+#model_B.compile(optimizer='adam',
+#               loss='sparse_categorical_crossentropy',
+#               metrics=['accuracy'])
+# 
+#model_B.fit(np.array(X_train_R), np.array(train_labels), epochs=10)
+# 
+## test
+#test_loss_R, test_acc_R = model_R.evaluate(np.array(X_test_R), np.array(test_labels), verbose=2)
+#test_loss_G, test_acc_G = model_R.evaluate(np.array(X_test_G), np.array(test_labels), verbose=2)
+#test_loss_B, test_acc_B = model_B.evaluate(np.array(X_test_B), np.array(test_labels), verbose=2)
+#
+#print('\nTest accuracy R:', test_acc_R)
+#print('\nTest accuracy G:', test_acc_G)
+#print('\nTest accuracy B:', test_acc_B)
 
 # =============================================================================
 
