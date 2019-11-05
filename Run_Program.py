@@ -1,8 +1,8 @@
 import Plant_Animal_Classifier_Split as PAC
 
 # subject to change on different Machines
-populus_trichocarpa_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\images final\\populus_trichocarpa\\"
-felis_catus_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\images final\\felis_catus\\"
+populus_trichocarpa_dir = "populus_trichocarpa\\"
+felis_catus_dir = "felis_catus\\"
 
 
 # Static Classifiers for class names
