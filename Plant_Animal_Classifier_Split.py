@@ -39,7 +39,7 @@ class Plant_animal_Classifier:
         all_PCA_R , all_PCA_G, all_PCA_B =\
             self.pca_alg(all_images, self.resize_int, all_images_R, all_images_G, all_images_B)
 
-        X_train_R, X_train_G, X_train_B, X_test_R, X_test_G, X_test_B, train_labels, test_labels = \
+        X_train_R, X_train_G, X_train_B, X_test_R, X_test_G, X_test_B, test_labels, train_labels = \
             self.split_train_rgb(all_PCA_R, all_PCA_G, all_PCA_B, all_labels)
 
         X_train, X_test = self.create_test_train_lists(X_train_R, X_train_G, X_train_B, X_test_R, X_test_G, X_test_B)
