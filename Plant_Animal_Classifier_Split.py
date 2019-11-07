@@ -33,14 +33,14 @@ class Plant_animal_Classifier:
     def main_loop(self):
         all_samples, all_labels = self.split_categorically()
 
-        all_images, all_images_R, all_images_G, all_images_B =\
+        all_images, all_images_r, all_images_g, all_images_b =\
             self.create_lists(all_samples, self.resize_int)
 
-        all_PCA_R , all_PCA_G, all_PCA_B =\
-            self.pca_alg(all_images, self.resize_int, all_images_R, all_images_G, all_images_B)
+        all_pca_r , all_pca_g, all_pca_b =\
+            self.pca_alg(all_images, self.resize_int, all_images_r, all_images_g, all_images_b)
 
         X_train_R, X_train_G, X_train_B, X_test_R, X_test_G, X_test_B, test_labels, train_labels = \
-            self.split_train_rgb(all_PCA_R, all_PCA_G, all_PCA_B, all_labels)
+            self.split_train_rgb(all_pca_r, all_pca_g, all_pca_b, all_labels)
 
         X_train, X_test = self.create_test_train_lists(X_train_R, X_train_G, X_train_B, X_test_R, X_test_G, X_test_B)
 
@@ -50,7 +50,6 @@ class Plant_animal_Classifier:
 
     def get_results(self, test_lost, test_acc):
         print('\nTest accuracy:', test_acc)
-
 
     def train_compile_model(self, X_train, X_test, train_labels, test_labels):
         # train model
@@ -89,7 +88,6 @@ class Plant_animal_Classifier:
         X_test_R, X_test_G, X_test_B = zip(*X_test_RGB)
 
         return X_train_R, X_train_G, X_train_B, X_test_R, X_test_G, X_test_B, test_labels, train_labels
-
 
     def pca_alg(self, all_images, resize_int, all_images_R, all_images_G, all_images_B):
         all_images_flattened_R = np.zeros((len(all_images), resize_int * resize_int))
