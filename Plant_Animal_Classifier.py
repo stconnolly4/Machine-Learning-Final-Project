@@ -27,10 +27,10 @@ from tensorflow import keras
 # import numpy as np
 import matplotlib.pyplot as plt
 
-# felis_catus_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\felis_catus\\"
-# populus_trichocarpa_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\populus_trichocarpa\\"
-felis_catus_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\images final\\felis_catus\\"
-populus_trichocarpa_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\images final\\populus_trichocarpa\\"
+felis_catus_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\felis_catus\\"
+populus_trichocarpa_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\populus_trichocarpa\\"
+#felis_catus_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\images final\\felis_catus\\"
+#populus_trichocarpa_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\images final\\populus_trichocarpa\\"
 
 # dictionary of labels to species
 class_names = {0: "populus_trichocarpa", \
