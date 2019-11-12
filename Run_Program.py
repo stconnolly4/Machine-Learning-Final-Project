@@ -1,4 +1,5 @@
-import Plant_Animal_Classifier_Split as PAC
+from Plant_Animal_Classifier_Split import Plant_Animal_Classifier as PAC
+
 
 # subject to change on different Machines
 populus_trichocarpa_dir = "populus_trichocarpa\\"
@@ -17,9 +18,13 @@ plants_dir = "animals\\cane\\"
 animals_dir = "animals\\farfalla\\"
 
 # Static Classifiers for plant vs animal
-class_namesa = {0: "cane",
-                1: "farfalla"}
+class_namesa = {0: "tree",
+                1: "cat"}
 
 # Return the results
-results = PAC.Plant_animal_Classifier(class_namesa, plants_dir, animals_dir)
+# results = PAC.Plant_Animal_Classifier(class_namesa, populus_trichocarpa_dir, felis_catus_dir)
+results = PAC(class_namesa, populus_trichocarpa_dir, felis_catus_dir)
 results.main_loop()
+
+predictions = results.predict_using_trained_model(populus_trichocarpa_dir)
+print(predictions)

@@ -23,7 +23,8 @@ import matplotlib.pyplot as plt
 
 
 class Plant_Animal_Classifier:
-    def __init__(self, plant_image_dir, animal_image_dir, resize_int=50):
+    def __init__(self,classnames, plant_image_dir, animal_image_dir, resize_int=50):
+        self.classnames = classnames
         self.Pimages = plant_image_dir
         self.Aimages = animal_image_dir
         self.resize_int = resize_int
@@ -35,6 +36,7 @@ class Plant_Animal_Classifier:
 
 
     def main_loop(self):
+        print(self.Pimages)
         all_samples, all_labels = self.split_categorically()
 
         all_images, all_images_r, all_images_g, all_images_b =\
@@ -94,17 +96,19 @@ class Plant_Animal_Classifier:
         for image in vals_B:
             images_flattened_B.append(np.array(image).flatten())
              
-        images_principal_components_R = self.pca_R.fit_transform(images_flattened_R)
-        images_principal_components_G = self.pca_G.fit_transform(images_flattened_G)
-        images_principal_components_B = self.pca_B.fit_transform(images_flattened_B)
- 
+        images_principal_components_R = self.pca_R.transform(images_flattened_R)
+        images_principal_components_G = self.pca_G.transform(images_flattened_G)
+        images_principal_components_B = self.pca_B.transform(images_flattened_B)
+
+        # print(images_principal_components_R)
+        # images_principal_components_R_tans = self.pca_R.fit_transform(images_flattened_R)
+        # print(images_principal_components_R_tans)
         X = []
         for i in range(len(images_principal_components_R)):
             X.append(np.concatenate((images_principal_components_R[i], images_principal_components_G[i], images_principal_components_B[i])))
-            
-            
+
         predictions = self.model.predict_classes(np.array(X))
-         
+
         return predictions
         
 
