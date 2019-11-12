@@ -22,13 +22,17 @@ from tensorflow import keras
 import matplotlib.pyplot as plt
 
 
-class Plant_animal_Classifier:
-    def __init__(self, class_name, plant_image_dir, animal_image_dir, resize_int=50):
-
-        self.class_name = class_name
+class Plant_Animal_Classifier:
+    def __init__(self, plant_image_dir, animal_image_dir, resize_int=50):
         self.Pimages = plant_image_dir
         self.Aimages = animal_image_dir
         self.resize_int = resize_int
+        
+        self.model = None
+        self.pca_R = None
+        self.pca_G = None
+        self.pca_B = None
+
 
     def main_loop(self):
         all_samples, all_labels = self.split_categorically()
@@ -53,20 +57,56 @@ class Plant_animal_Classifier:
 
     def train_compile_model(self, X_train, X_test, train_labels, test_labels):
         # train model
-        model = keras.Sequential([
+        self.model = keras.Sequential([
             keras.layers.Dense(128, activation='relu'),
             keras.layers.Dense(10, activation='softmax')
         ])
 
-        model.compile(optimizer='adam',
+        self.model.compile(optimizer='adam',
                       loss='sparse_categorical_crossentropy',
                       metrics=['accuracy'])
 
-        model.fit(np.array(X_train), np.array(train_labels), epochs=10)
+        self.model.fit(np.array(X_train), np.array(train_labels), epochs=10)
 
-        test_loss, test_acc = model.evaluate(np.array(X_test), np.array(test_labels), verbose=2)
+        test_loss, test_acc = self.model.evaluate(np.array(X_test), np.array(test_labels), verbose=2)
 
         return test_loss, test_acc
+    
+    
+    def return_classifier(self):
+        return self.model
+    
+    def predict_using_trained_model(self, images_dir):
+        all_images_directory = [images_dir + "{}".format(i) for i in os.listdir(images_dir)]
+                
+        _, vals_R, vals_G, vals_B = self.create_lists(all_images_directory, self.resize_int)
+        
+        images_flattened_R = []
+        for image in vals_R:
+            images_flattened_R.append(np.array(image).flatten())
+ 
+ 
+        images_flattened_G = []
+        for image in vals_G:
+            images_flattened_G.append(np.array(image).flatten())
+ 
+        images_flattened_B = []
+        for image in vals_B:
+            images_flattened_B.append(np.array(image).flatten())
+             
+        images_principal_components_R = self.pca_R.fit_transform(images_flattened_R)
+        images_principal_components_G = self.pca_G.fit_transform(images_flattened_G)
+        images_principal_components_B = self.pca_B.fit_transform(images_flattened_B)
+ 
+        X = []
+        for i in range(len(images_principal_components_R)):
+            X.append(np.concatenate((images_principal_components_R[i], images_principal_components_G[i], images_principal_components_B[i])))
+            
+            
+        predictions = self.model.predict_classes(np.array(X))
+         
+        return predictions
+        
 
     def create_test_train_lists(self, X_train_R, X_train_G, X_train_B, X_test_R, X_test_G, X_test_B):
         X_train = []
@@ -95,6 +135,7 @@ class Plant_animal_Classifier:
             image = all_images_R[i]
             all_images_flattened_R[i] = np.array(image).flatten()
 
+
         all_images_flattened_G = []
         for image in all_images_G:
             all_images_flattened_G.append(np.array(image).flatten())
@@ -105,13 +146,13 @@ class Plant_animal_Classifier:
 
         number_of_components = 10
 
-        pca_R = PCA(n_components=number_of_components)
-        pca_G = PCA(n_components=number_of_components)
-        pca_B = PCA(n_components=number_of_components)
+        self.pca_R = PCA(n_components=number_of_components)
+        self.pca_G = PCA(n_components=number_of_components)
+        self.pca_B = PCA(n_components=number_of_components)
 
-        all_images_principal_components_R = pca_R.fit_transform(all_images_flattened_R)
-        all_images_principal_components_G = pca_G.fit_transform(all_images_flattened_G)
-        all_images_principal_components_B = pca_B.fit_transform(all_images_flattened_B)
+        all_images_principal_components_R = self.pca_R.fit_transform(all_images_flattened_R)
+        all_images_principal_components_G = self.pca_G.fit_transform(all_images_flattened_G)
+        all_images_principal_components_B = self.pca_B.fit_transform(all_images_flattened_B)
 
         return all_images_principal_components_R, all_images_principal_components_G, all_images_principal_components_B
 
@@ -124,9 +165,6 @@ class Plant_animal_Classifier:
         all_images_B = []
 
         for image in all_images:
-            #    temp_R = [[0 for i in range(resize_int)] for j in range(resize_int)]
-            #    temp_G = [[0 for i in range(resize_int)] for j in range(resize_int)]
-            #    temp_B = [[0 for i in range(resize_int)] for j in range(resize_int)]
             temp_R = np.zeros((resize_int, resize_int))
             temp_G = np.zeros((resize_int, resize_int))
             temp_B = np.zeros((resize_int, resize_int))
