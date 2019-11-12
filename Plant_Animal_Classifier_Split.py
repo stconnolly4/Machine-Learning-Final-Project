@@ -23,7 +23,7 @@ import matplotlib.pyplot as plt
 
 
 class Plant_Animal_Classifier:
-    def __init__(self,classnames, plant_image_dir, animal_image_dir, resize_int=50):
+    def __init__(self, classnames, plant_image_dir, animal_image_dir, resize_int=50):
         self.classnames = classnames
         self.Pimages = plant_image_dir
         self.Aimages = animal_image_dir
@@ -36,7 +36,7 @@ class Plant_Animal_Classifier:
 
 
     def main_loop(self):
-        print(self.Pimages)
+
         all_samples, all_labels = self.split_categorically()
 
         all_images, all_images_r, all_images_g, all_images_b =\
@@ -109,7 +109,22 @@ class Plant_Animal_Classifier:
 
         predictions = self.model.predict_classes(np.array(X))
 
-        return predictions
+        count_zero = 0
+        count_one = 0
+        count_total = 0
+
+        for i in predictions:
+            if i == 0:
+                count_zero += 1
+                count_total += 1
+            elif i == 1:
+                count_one +=1
+                count_total += 1
+            else:
+                count_total+=1
+
+        accuracy = count_zero/count_total
+        return predictions, accuracy
         
 
     def create_test_train_lists(self, X_train_R, X_train_G, X_train_B, X_test_R, X_test_G, X_test_B):

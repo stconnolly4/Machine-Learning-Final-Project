@@ -26,5 +26,6 @@ class_namesa = {0: "tree",
 results = PAC(class_namesa, populus_trichocarpa_dir, felis_catus_dir)
 results.main_loop()
 
-predictions = results.predict_using_trained_model(populus_trichocarpa_dir)
+predictions, accuracy = results.predict_using_trained_model(populus_trichocarpa_dir)
+print("The Accuracy is: " + str(accuracy))
 print(predictions)
