@@ -78,7 +78,7 @@ class Plant_Animal_Classifier:
     def return_classifier(self):
         return self.model
     
-    def predict_using_trained_model(self, images_dir):
+    def predict_using_trained_model(self, images_dir, typepassedin1, typepassedin2):
         all_images_directory = [images_dir + "{}".format(i) for i in os.listdir(images_dir)]
                 
         _, vals_R, vals_G, vals_B = self.create_lists(all_images_directory, self.resize_int)
@@ -109,22 +109,29 @@ class Plant_Animal_Classifier:
 
         predictions = self.model.predict_classes(np.array(X))
 
+        # predictions.replace(0, typepassedin1)
+        # predictions.replace(1, typepassedin2)
+
+        predictions = np.where(predictions == 0, typepassedin1, predictions)
+        predictions = np.where(predictions == '1', typepassedin2, predictions)
+
         count_zero = 0
         count_one = 0
         count_total = 0
 
         for i in predictions:
-            if i == 0:
+            print(predictions)
+            if i == typepassedin1:
                 count_zero += 1
                 count_total += 1
-            elif i == 1:
-                count_one +=1
+            elif i == typepassedin2:
+                count_one += 1
                 count_total += 1
             else:
-                count_total+=1
+                count_total += 1
 
         accuracy = count_zero/count_total
-        return predictions, accuracy
+        return predictions, accuracy, typepassedin1, typepassedin2
         
 
     def create_test_train_lists(self, X_train_R, X_train_G, X_train_B, X_test_R, X_test_G, X_test_B):
@@ -208,8 +215,7 @@ class Plant_Animal_Classifier:
     def split_categorically(self):
         # read in all paths into lists
         all_animals = [self.Aimages + "{}".format(i) for i in os.listdir(self.Aimages)]
-        all_plants = [self.Pimages + "{}".format(i) for i in
-                                   os.listdir(self.Pimages)]
+        all_plants = [self.Pimages + "{}".format(i) for i in os.listdir(self.Pimages)]
 
         # get number of samples
         num_samples_all_felis_catus = len(all_animals)
@@ -234,12 +240,15 @@ class Plant_Animal_Classifier:
     def split_rgb(self, all_animals, all_plants):
         # split images into R, G, B floats
         resize_int = 50
+        # randomly choose a picture from given directory to show
+        imgAInt = random.randint(0, len(all_animals))
+        imgBInt = random.randint(0, len(all_plants))
 
-        imgA = Image.open(all_animals[90])
+        imgA = Image.open(all_animals[imgAInt])
         imgA = imgA.resize((resize_int, resize_int), PIL.Image.ANTIALIAS)
         animal_zero_as_floats = skimage.img_as_float(imgA)
 
-        imgP = Image.open(all_plants[90])
+        imgP = Image.open(all_plants[imgBInt])
         imgP = imgP.resize((resize_int, resize_int), PIL.Image.ANTIALIAS)
         plant_zero_as_floats = skimage.img_as_float(imgP)
 
