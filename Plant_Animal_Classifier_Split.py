@@ -251,8 +251,8 @@ class Plant_Animal_Classifier:
         imgP = imgP.resize((resize_int, resize_int), PIL.Image.ANTIALIAS)
         plant_zero_as_floats = skimage.img_as_float(imgP)
 
-        print(animal_zero_as_floats)
-        print(plant_zero_as_floats)
+        # print(animal_zero_as_floats)
+        # print(plant_zero_as_floats)
 
         self.display_plots(imgA, animal_zero_as_floats)
         self.display_plots(imgP, plant_zero_as_floats)
