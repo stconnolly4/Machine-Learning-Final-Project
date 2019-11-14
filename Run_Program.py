@@ -7,8 +7,8 @@ felis_catus_dir = "felis_catus\\"
 
 
 # Static Classifiers for class names
-class_names = {0: "populus_trichocarpa",
-               1: "felis_catus"}
+class_names = {0: "felis_catus",
+               1: "populus_trichocarpa"}
 
 
 # Dataset
@@ -16,18 +16,24 @@ class_names = {0: "populus_trichocarpa",
 # My path to plants and animals folders.
 dog_dir = "animals\\cane\\"
 butterfly_dir = "animals\\farfalla\\"
+cat_dir = "animals\\gatto\\"
 
 # Static Classifiers for plant vs animal
-class_namesa = {0: "dog",
+class_namesa = {0: "cat",
                 1: "butterfly"}
 
 # Return the results
-# results = PAC.Plant_Animal_Classifier(class_namesa, populus_trichocarpa_dir, felis_catus_dir)
+results = PAC(class_names, felis_catus_dir, populus_trichocarpa_dir)
 # MUST BE PAC(class_namesa, classifierdir1, classifierdir2)
-results = PAC(class_namesa, dog_dir, butterfly_dir)
+# results = PAC(class_namesa, dog_dir, butterfly_dir)
 results.main_loop()
 
 # MUST BE (CLASSIFIERDIR1, TYPE1, TYPE2)
-predictions, accuracy, type, type2 = results.predict_using_trained_model(dog_dir, "dog", "butterfly")
+# predictions, accuracy, type, type2 = results.predict_using_trained_model(dog_dir, "cat", "butterfly")
+# print("The Accuracy for " + type + ": " + str(accuracy))
+# print(predictions)
+
+
+predictions, accuracy, type, type2 = results.predict_using_trained_model(cat_dir, "cat", "tree")
 print("The Accuracy for " + type + ": " + str(accuracy))
 print(predictions)

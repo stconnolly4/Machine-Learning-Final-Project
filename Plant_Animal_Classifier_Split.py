@@ -120,7 +120,6 @@ class Plant_Animal_Classifier:
         count_total = 0
 
         for i in predictions:
-            print(predictions)
             if i == typepassedin1:
                 count_zero += 1
                 count_total += 1
