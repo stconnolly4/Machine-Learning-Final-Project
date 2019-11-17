@@ -23,11 +23,20 @@ import matplotlib.pyplot as plt
 
 
 class Plant_Animal_Classifier:
-    def __init__(self, classnames, plant_image_dir, animal_image_dir, resize_int=50):
+    def __init__(self, classnames, dir_1, dir_2, resize_int=50):
         self.classnames = classnames
-        self.Pimages = plant_image_dir
-        self.Aimages = animal_image_dir
+        self.dir_1_list = False
+        self.dir_2_list = False
         self.resize_int = resize_int
+
+        self.Pimages = dir_1
+        self.Aimages = dir_2       
+        
+        if type(dir_1) is list:
+            self.dir_1_list = True
+
+        if type(dir_2) is list:
+            self.dir_2_list = True
         
         self.model = None
         self.pca_R = None
@@ -78,7 +87,7 @@ class Plant_Animal_Classifier:
     def return_classifier(self):
         return self.model
     
-    def predict_using_trained_model(self, images_dir, typepassedin1, typepassedin2):
+    def predict_using_trained_model(self, images_dir, plot=False): #, typepassedin1, typepassedin2):
         all_images_directory = [images_dir + "{}".format(i) for i in os.listdir(images_dir)]
                 
         _, vals_R, vals_G, vals_B = self.create_lists(all_images_directory, self.resize_int)
@@ -108,29 +117,42 @@ class Plant_Animal_Classifier:
             X.append(np.concatenate((images_principal_components_R[i], images_principal_components_G[i], images_principal_components_B[i])))
 
         predictions = self.model.predict_classes(np.array(X))
-
+        
+        predictions_to_return = []
+        for p in predictions:
+            if p == 0:
+               predictions_to_return.append(self.classnames[0])
+            else:
+                predictions_to_return.append(self.classnames[1])
+                
+        if plot:
+            for i in range(len(predictions_to_return)):
+                print(predictions_to_return[i])
+                display.display(Image.open(all_images_directory[i]))
+        
+        return predictions_to_return
         # predictions.replace(0, typepassedin1)
         # predictions.replace(1, typepassedin2)
 
-        predictions = np.where(predictions == 0, typepassedin1, predictions)
-        predictions = np.where(predictions == '1', typepassedin2, predictions)
+   #     predictions = np.where(predictions == 0, typepassedin1, predictions)
+    #    predictions = np.where(predictions == 1, typepassedin2, predictions)
 
-        count_zero = 0
-        count_one = 0
-        count_total = 0
-
-        for i in predictions:
-            if i == typepassedin1:
-                count_zero += 1
-                count_total += 1
-            elif i == typepassedin2:
-                count_one += 1
-                count_total += 1
-            else:
-                count_total += 1
-
-        accuracy = count_zero/count_total
-        return predictions, accuracy, typepassedin1, typepassedin2
+#        count_zero = 0
+#        count_one = 0
+#        count_total = 0
+#
+#        for i in predictions:
+#            if i == typepassedin1:
+#                count_zero += 1
+#                count_total += 1
+#            elif i == typepassedin2:
+#                count_one += 1
+#                count_total += 1
+#            else:
+#                count_total += 1
+#
+#        accuracy = count_zero/count_total
+     #   return predictions, accuracy, typepassedin1, typepassedin2
         
 
     def create_test_train_lists(self, X_train_R, X_train_G, X_train_B, X_test_R, X_test_G, X_test_B):
@@ -188,7 +210,7 @@ class Plant_Animal_Classifier:
         all_images_R = []
         all_images_G = []
         all_images_B = []
-
+        
         for image in all_images:
             temp_R = np.zeros((resize_int, resize_int))
             temp_G = np.zeros((resize_int, resize_int))
@@ -213,8 +235,23 @@ class Plant_Animal_Classifier:
 
     def split_categorically(self):
         # read in all paths into lists
-        all_animals = [self.Aimages + "{}".format(i) for i in os.listdir(self.Aimages)]
-        all_plants = [self.Pimages + "{}".format(i) for i in os.listdir(self.Pimages)]
+        if self.dir_1_list == False:
+            all_animals = [self.Aimages + "{}".format(i) for i in os.listdir(self.Aimages)]
+        else:
+            all_animals = []
+            for directory in self.Aimages:
+                temp = [directory + "{}".format(i) for i in os.listdir(directory)]
+                for t in temp:
+                    all_animals.append(t)
+        
+        if self.dir_2_list == False:
+            all_plants = [self.Pimages + "{}".format(i) for i in os.listdir(self.Pimages)]
+        else:
+            all_plants = []
+            for directory in self.Pimages:
+                temp = [directory + "{}".format(i) for i in os.listdir(directory)]
+                for t in temp:
+                    all_plants.append(t)
 
         # get number of samples
         num_samples_all_felis_catus = len(all_animals)
@@ -233,7 +270,7 @@ class Plant_Animal_Classifier:
         random.shuffle(combined_samples_and_lists)
         all_samples, all_labels = zip(*combined_samples_and_lists)
 
-        self.split_rgb(all_animals, all_plants)
+   #     self.split_rgb(all_animals, all_plants)
         return all_samples, all_labels
 
     def split_rgb(self, all_animals, all_plants):
