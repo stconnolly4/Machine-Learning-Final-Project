@@ -20,7 +20,7 @@ from tensorflow import keras
 # Helper libraries
 # import numpy as np
 import matplotlib.pyplot as plt
-
+import pickle
 
 class Plant_Animal_Classifier:
     def __init__(self, classnames, dir_1, dir_2, resize_int=50):
@@ -43,7 +43,12 @@ class Plant_Animal_Classifier:
         self.pca_G = None
         self.pca_B = None
 
-
+    def save_pickle(self, name):
+        save_classifier = open(name + ".pickle","wb")
+        pickle.dump(self.model, save_classifier)
+        save_classifier.close()
+        
+        
     def main_loop(self):
 
         all_samples, all_labels = self.split_categorically()
@@ -215,6 +220,7 @@ class Plant_Animal_Classifier:
             temp_R = np.zeros((resize_int, resize_int))
             temp_G = np.zeros((resize_int, resize_int))
             temp_B = np.zeros((resize_int, resize_int))
+            
             for r in range(len(image)):
                 row = image[r]
                 for p in range(len(row)):
