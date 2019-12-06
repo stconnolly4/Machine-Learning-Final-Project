@@ -14,6 +14,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA
 
 # TensorFlow and tf.keras
+import os
+os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 import tensorflow as tf
 from tensorflow import keras
 
@@ -132,8 +134,16 @@ class Plant_Animal_Classifier:
                 
         if plot:
             for i in range(len(predictions_to_return)):
-                print(predictions_to_return[i])
+                #print(predictions_to_return[i])
+                imgP = Image.open(all_images_directory[i])
+                #imgP = imgP.resize((50, 50), PIL.Image.ANTIALIAS)
+                prediction_as_floats = skimage.img_as_float(imgP)
                 display.display(Image.open(all_images_directory[i]))
+                plt.figure()
+                plt.imshow(prediction_as_floats)
+                plt.grid(False)
+                plt.show()
+
         
         return predictions_to_return
         # predictions.replace(0, typepassedin1)
@@ -276,7 +286,7 @@ class Plant_Animal_Classifier:
         random.shuffle(combined_samples_and_lists)
         all_samples, all_labels = zip(*combined_samples_and_lists)
 
-   #     self.split_rgb(all_animals, all_plants)
+        self.split_rgb(all_animals, all_plants)
         return all_samples, all_labels
 
     def split_rgb(self, all_animals, all_plants):
