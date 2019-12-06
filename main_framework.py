@@ -5,23 +5,23 @@ Created on Sun Nov 10 13:01:56 2019
 @author: samic
 """
 from Plant_Animal_Classifier_Split import Plant_Animal_Classifier
-import pickle
+import numpy as np
 
 
 ### plant vs animal classifier ###
 
 # train classifier
-# felis_catus_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\felis_catus\\"
-# canis_familiaris_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\canis_familiaris\\"
-# populus_trichocarpa_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\populus_trichocarpa\\"
-# oryza_sativa_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\oryza_sativa\\"
-# vitis_vinifera_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\vitis_vinifera\\"
+felis_catus_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\felis_catus\\"
+canis_familiaris_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\canis_familiaris\\"
+populus_trichocarpa_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\populus_trichocarpa\\"
+oryza_sativa_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\oryza_sativa\\"
+vitis_vinifera_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\vitis_vinifera\\"
 
-felis_catus_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\gatto\\"
-canis_familiaris_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\cane\\"
-populus_trichocarpa_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\populus_trichocarpa\\"
-oryza_sativa_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\oryza_sativa\\"
-vitis_vinifera_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\vitis_vinifera\\"
+#felis_catus_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\gatto\\"
+#canis_familiaris_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\cane\\"
+#populus_trichocarpa_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\populus_trichocarpa\\"
+#oryza_sativa_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\oryza_sativa\\"
+#vitis_vinifera_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\vitis_vinifera\\"
 
 
 plants_dir = [populus_trichocarpa_dir, oryza_sativa_dir]
@@ -44,13 +44,13 @@ animals_dir = [felis_catus_dir, canis_familiaris_dir, vitis_vinifera_dir]
 
 plant_animal = Plant_Animal_Classifier({0: "plant", 1: "animal"}, plants_dir, animals_dir)
 plant_animal.main_loop()
-
-plant_animal.save_pickle("plant_animal")
+plant_animal.save_to_file_test('Plant_Animal.npy')
 
 # run the classifier on a specific images
 # testing_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\testing_images\\"
-testing_dir = "C:\\Users\\djenz\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\testing_images"
-predictions = plant_animal.predict_using_trained_model(testing_dir, plot=True)
+#testing_dir = "C:\\Users\\djenz\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\testing_images"
+
+#predictions = plant_animal.predict_using_trained_model(testing_dir, plot=True)
 
 # now loop through predictions, if it's an animal, call canis_felis
 

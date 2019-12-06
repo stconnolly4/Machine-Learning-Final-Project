@@ -18,9 +18,9 @@ import tensorflow as tf
 from tensorflow import keras
 
 # Helper libraries
-# import numpy as np
+import numpy as np
 import matplotlib.pyplot as plt
-import pickle
+
 
 class Plant_Animal_Classifier:
     def __init__(self, classnames, dir_1, dir_2, resize_int=50):
@@ -42,12 +42,9 @@ class Plant_Animal_Classifier:
         self.pca_R = None
         self.pca_G = None
         self.pca_B = None
-
-    def save_pickle(self, name):
-        save_classifier = open(name + ".pickle","wb")
-        pickle.dump(self.model, save_classifier)
-        save_classifier.close()
-        
+    
+    def save_to_file_test(self, filename):
+         np.save(filename, self.model)
         
     def main_loop(self):
 
@@ -91,6 +88,7 @@ class Plant_Animal_Classifier:
     
     def return_classifier(self):
         return self.model
+
     
     def predict_using_trained_model(self, images_dir, plot=False): #, typepassedin1, typepassedin2):
         all_images_directory = [images_dir + "{}".format(i) for i in os.listdir(images_dir)]
