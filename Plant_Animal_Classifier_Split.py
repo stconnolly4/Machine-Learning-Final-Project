@@ -44,8 +44,10 @@ class Plant_Animal_Classifier:
         self.pca_B = None
     
     def save_to_file_test(self, filename):
-         np.save(filename, self.model)
-        
+        # np.save(filename, self.model)
+        self.model.save(filename)
+    
+    
     def main_loop(self):
 
         all_samples, all_labels = self.split_categorically()

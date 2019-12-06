@@ -44,13 +44,16 @@ animals_dir = [felis_catus_dir, canis_familiaris_dir, vitis_vinifera_dir]
 
 plant_animal = Plant_Animal_Classifier({0: "plant", 1: "animal"}, plants_dir, animals_dir)
 plant_animal.main_loop()
-plant_animal.save_to_file_test('Plant_Animal.npy')
+
+plant_animal.save_to_file_test('Plant_Animal.h5')
+from tensorflow import keras
+plant_animal = keras.models.load_model('Plant_Animal.h5')
 
 # run the classifier on a specific images
-# testing_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\testing_images\\"
+testing_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\testing_images\\"
 #testing_dir = "C:\\Users\\djenz\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\testing_images"
 
-#predictions = plant_animal.predict_using_trained_model(testing_dir, plot=True)
+predictions = plant_animal.predict_using_trained_model(testing_dir, plot=True)
 
 # now loop through predictions, if it's an animal, call canis_felis
 
