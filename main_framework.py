@@ -16,6 +16,7 @@ canis_familiaris_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning
 populus_trichocarpa_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\populus_trichocarpa\\"
 oryza_sativa_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\oryza_sativa\\"
 vitis_vinifera_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\vitis_vinifera\\"
+arabidopsis_thaliana_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\arabidopsis_thaliana\\"
 
 #felis_catus_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\gatto\\"
 #canis_familiaris_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\cane\\"
@@ -24,8 +25,8 @@ vitis_vinifera_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\
 #vitis_vinifera_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\vitis_vinifera\\"
 
 
-plants_dir = [populus_trichocarpa_dir, oryza_sativa_dir]
-animals_dir = [felis_catus_dir, canis_familiaris_dir, vitis_vinifera_dir]
+plants_dir = [arabidopsis_thaliana_dir, populus_trichocarpa_dir, oryza_sativa_dir, vitis_vinifera_dir]
+animals_dir = [felis_catus_dir, canis_familiaris_dir]
 
 #felis_populus = Plant_Animal_Classifier({0: "cat", 1: "tree"}, felis_catus_dir, populus_trichocarpa_dir)
 #felis_populus.main_loop()
@@ -33,21 +34,24 @@ animals_dir = [felis_catus_dir, canis_familiaris_dir, vitis_vinifera_dir]
 #canis_populus = Plant_Animal_Classifier({0: "dog", 1: "tree"}, canis_familiaris_dir, populus_trichocarpa_dir)
 #canis_populus.main_loop()
 
-#canis_felis = Plant_Animal_Classifier({0: "dog", 1: "cat"}, canis_familiaris_dir, felis_catus_dir)
-#canis_felis.main_loop()
+canis_felis = Plant_Animal_Classifier({0: "dog", 1: "cat"}, canis_familiaris_dir, felis_catus_dir)
+canis_felis.main_loop()
 
-#populus_oryza = Plant_Animal_Classifier({0: "populus tricocharpa", 1: "oryza sativa"}, populus_trichocarpa_dir, oryza_sativa_dir)
-#populus_oryza.main_loop()
+populus_oryza = Plant_Animal_Classifier({0: "populus tricocharpa", 1: "oryza sativa"}, populus_trichocarpa_dir, oryza_sativa_dir)
+populus_oryza.main_loop()
 
-#populus_vitis = Plant_Animal_Classifier({0: "populus tricocharpa", 1: "vitis vinifera"}, populus_trichocarpa_dir, vitis_vinifera_dir)
-#populus_vitis.main_loop()
+populus_vitis = Plant_Animal_Classifier({0: "populus tricocharpa", 1: "vitis vinifera"}, populus_trichocarpa_dir, vitis_vinifera_dir)
+populus_vitis.main_loop()
+
+vitis_arabidopsis = Plant_Animal_Classifier({0: "vitis vinifera", 1: "arabidopsis thaliana"}, vitis_vinifera_dir, arabidopsis_thaliana_dir)
+vitis_arabidopsis.main_loop()
 
 plant_animal = Plant_Animal_Classifier({0: "plant", 1: "animal"}, plants_dir, animals_dir)
 plant_animal.main_loop()
 
-plant_animal.save_to_file_test('Plant_Animal.h5')
-from tensorflow import keras
-plant_animal = keras.models.load_model('Plant_Animal.h5')
+#plant_animal.save_to_file_test('Plant_Animal.h5')
+#from tensorflow import keras
+#plant_animal = keras.models.load_model('Plant_Animal.h5')
 
 # run the classifier on a specific images
 testing_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\testing_images\\"
