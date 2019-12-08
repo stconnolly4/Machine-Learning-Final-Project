@@ -24,12 +24,12 @@ class CNN_Classification:
         self.dir_1_list = False
         self.dir_2_list = False
         self.model = None
+        #
+        # self.TRAIN_DIR = "C:\\Users\\samic\\Documents\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST"
+        # self.TEST_DIR = "C:\\Users\\samic\\Documents\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN"
 
-        self.TRAIN_DIR = "C:\\Users\\samic\\Documents\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST"
-        self.TEST_DIR = "C:\\Users\\samic\\Documents\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN"
-
- #       self.TRAIN_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN\\"
- #       self.TEST_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST\\"
+        self.TRAIN_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN\\"
+        self.TEST_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST\\"
 
         if type(dir1) is list:
             self.dir_1_list = True
@@ -39,15 +39,19 @@ class CNN_Classification:
 
 
     def main_loop(self):
+        self.move_to_folders()
+
         LR = 1e-6
-        MODEL_NAME = 'CNN-{}-{}.model'.format(LR, '6conv')
+        MODEL_NAME = 'CNN-{}-vs-{}.model'.format(self.classnames[0], self.classnames[1])
         train_data = self.use_train_data()
         model = self.neural_net_architecture(LR)
         self.model = model
 
 
-        train = train_data[:-500]
-        test = train_data[-500:]
+
+
+        train = train_data[:-20]
+        test = train_data[-20:]
         X = np.array([i[0] for i in train]).reshape(-1, self.IMG_SIZE, self.IMG_SIZE, 1)
         Y = [i[1] for i in train]
 
@@ -56,7 +60,7 @@ class CNN_Classification:
 
         # Train the network
         self.model.fit({'input': X}, {'targets': Y}, n_epoch=10, validation_set=({'input': test_x}, {'targets': test_y}),
-                  snapshot_step=500, show_metric=True, run_id=MODEL_NAME)
+                       show_metric=True, run_id=MODEL_NAME)
         # tensorboard --logdir="C:\Users\djenz\OneDrive - University of Vermont\Machine-Learning-Final-Project\CNN TUT\log"
         self.model.save(MODEL_NAME)
 
@@ -65,37 +69,9 @@ class CNN_Classification:
         testing_data = self.process_test_data()
 
     def move_to_folders(self):
-#        class_chicken = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\gallina\\"
-#        class_dog = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\cane\\"
-#        class_kitty = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\gatto\\"
-#        class_elephant = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\elefante\\"
-#        class_horse = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\cavallo\\"
-#        class_sheep = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\pecora\\"
-#        class_squirrell = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\scoitattolo\\"
-#        class_mrmrscow = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\mucca\\"
-#
-        populus_trichocarpa_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\populus_trichocarpa\\"
-        oryza_sativa_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\oryza_sativa\\"
-        vitis_vinifera_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\vitis_vinifera\\"
-        arabidopsis_thaliana_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\arabidopsis_thaliana\\"
-        carica_papaya_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\carica_papaya\\"
-        selaginella_moellendorffii_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\selaginella_moellendorffii\\"
-        medicago_truncatula_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\medicago_truncatula\\"
-        sorghum_bicolor_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\sorghum_bicolor\\"
-
-     #   classnames = ["chicken", "dog", "cat", "elephant", "horse", "sheep", "squirrell", "cow"]
-     #   sources = [class_chicken, class_dog, class_kitty, class_elephant, class_horse, class_sheep, class_squirrell, class_mrmrscow]
-         classnames = ["populus", "oryza", "vitis", "arabidopsis", "carica", "selaginella", "medicago", "sorghum"]
-         sources = [populus_trichocarpa_dir, oryza_sativa_dir, vitis_vinifera_dir, arabidopsis_thaliana_dir, carica_papaya_dir, selaginella_moellendorffii_dir, medicago_truncatula_dir, sorghum_bicolor_dir]
-
-        src_class1 = ""
-        src_class2 = ""
-        for i in range(8):
-            if self.classnames[0] == classnames[i]:
-                src_class1 = sources[i]
-            if self.classnames[1] == classnames[i]:
-                src_class2 = sources[i]
-
+        classnames = self.classnames
+        src_class1 = self.class1images
+        src_class2 = self.class2images
 
 
         dest_TEST = self.TEST_DIR
@@ -167,9 +143,14 @@ class CNN_Classification:
 
 
     def label_img(self, img):
-        word_label = img.split('.')[-3]
-        if word_label == str(self.classnames[0]) : return [1,0]
-        elif word_label == str(self.classnames[1]) : return [0,1]
+        word_label = img.split('_')[-2]
+        classnames_in = ["arabidopsis", "carica", "medicacago", "populus", "vitis", "oryza", "sorghum"]
+        classname_lycophyte = ["selaginella"]
+        for i in classnames_in:
+            if word_label == str(i):
+                return [1,0]
+            else:
+                return [0,1]
 
     def create_train_data(self):
         training_data = []
@@ -233,7 +214,6 @@ class CNN_Classification:
         model = tflearn.DNN(convnet, tensorboard_dir='log')
 
         return model
-
 
 
 
