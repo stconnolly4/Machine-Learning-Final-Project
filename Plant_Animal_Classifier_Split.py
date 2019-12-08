@@ -70,11 +70,16 @@ class Plant_Animal_Classifier:
         self.CNN_model = self.neural_net_architecture(LR)
 
         X = np.array([i for i in X_train]).reshape(-1, self.resize_int, self.resize_int, 1)
+        print(Y)
+        Y = np.reshape(Y, (-1,2))
+        # Y = (64, Y)
+        # test_y = (64, test_y)
         print(Y[0])
         test_x = np.array([i for i in X_test]).reshape(-1, self.resize_int, self.resize_int, 1)
 
+
         # Train the network
-        self.CNN_model.fit({'input': X}, {'targets': Y}, n_epoch=10, validation_set=({'input': test_x}, {'targets': test_y}),
+        self.CNN_model.fit({'input': X}, {'targets': Y}, n_epoch=10, batch_size=32, validation_set=({'input': test_x}, {'targets': test_y}),
                   snapshot_step=None, show_metric=True, run_id=MODEL_NAME)
 
         self.CNN_model.save(MODEL_NAME)

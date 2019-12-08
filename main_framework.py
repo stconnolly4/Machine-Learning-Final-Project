@@ -67,13 +67,18 @@ canis_familiaris_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Mach
 # lycophytes_nonlycophytes.main_loop(True)
 
 # classifiers
-lycophytes_nonlycophytes = CNN_Classification({0: "lycophyte", 1: "non-lycophyte"}, lycophytes_dir, non_lycophytes_dir)
+# lycophytes_nonlycophytes = CNN_Classification({0: "lycophyte", 1: "non-lycophyte"}, lycophytes_dir, non_lycophytes_dir)
+# #lycophytes_nonlycophytes.main_loop(True)
+# lycophytes_nonlycophytes.main_loop()
+
+
+# monocot_dicot = Plant_Animal_Classifier({0: "monocot", 1: "dicot"}, monocots_dir, dicots_dir)
+# monocot_dicot.main_loop(True)
+
+# classifiers
+monocot_dicot = CNN_Classification({0: "monocot", 1: "dicot"}, monocots_dir, dicots_dir)
 #lycophytes_nonlycophytes.main_loop(True)
-lycophytes_nonlycophytes.main_loop()
-
-
-monocot_dicot = Plant_Animal_Classifier({0: "monocot", 1: "dicot"}, monocots_dir, dicots_dir)
-monocot_dicot.main_loop(True)
+monocot_dicot.main_loop()
 
 # within monocots
 oryza_sorghum =  Plant_Animal_Classifier({0: "oryza", 1: "sorghum"}, oryza_sativa_dir, sorghum_bicolor_dir)

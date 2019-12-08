@@ -66,7 +66,7 @@ class CNN_Classification:
 
         self.plot_figures()
 
-        
+
 
     def move_to_folders(self):
         classnames = self.classnames
@@ -117,23 +117,22 @@ class CNN_Classification:
 
         fig = plt.figure()
 
-        for num, data in enumerate(test_data[:12]):
+        for num, data in enumerate(test_data[:25]):
             # cat : [1,0]
             # dog : [0,1]
 
             img_num = data[1]
             img_data = data[0]
-
-            y = fig.add_subplot(3, 4, num + 1)
+            y = fig.add_subplot(5, 5, num + 1)
             orig = img_data
             data = img_data.reshape(self.IMG_SIZE, self.IMG_SIZE, 1)
 
             model_out = self.model.predict([data])[0]
 
             if np.argmax(model_out) == 1:
-                str_label = self.classnames[0]
+                str_label = self.classnames[0][:5]
             else:
-                str_label = self.classnames[1]
+                str_label = self.classnames[1][:5]
 
             y.imshow(orig, cmap='gray')
             plt.title(str_label)
@@ -143,14 +142,18 @@ class CNN_Classification:
 
 
     def label_img(self, img):
-        word_label = img.split('_')[-2]
-        classnames_in = ["arabidopsis", "carica", "medicacago", "populus", "vitis", "oryza", "sorghum"]
-        classname_lycophyte = ["selaginella"]
+        word_label = img.split('_')[-3]
+        if self.classnames[0] == "lycophyte":
+            classnames_in = ["arabidopsis", "carica", "medicago", "populus", "vitis", "oryza", "sorghum"]
+        if self.classnames[0] == "monocot":
+            classnames_in = ["arabidopsis", "carica", "medicago", "populus", "vitis"]
+
         for i in classnames_in:
+            print(word_label)
             if word_label == str(i):
                 return [1,0]
-            else:
-                return [0,1]
+
+        return [0,1]
 
     def create_train_data(self):
         training_data = []
@@ -159,6 +162,7 @@ class CNN_Classification:
             path = os.path.join(self.TRAIN_DIR, img)
             img = cv2.resize(cv2.imread(path, cv2.IMREAD_GRAYSCALE), (self.IMG_SIZE, self.IMG_SIZE))
             training_data.append([np.array(img), np.array(label)])
+        print(label)
         shuffle(training_data)
         np.save('train_data.npy', training_data)
         return training_data
@@ -167,7 +171,7 @@ class CNN_Classification:
         testing_data = []
         for img in tqdm(os.listdir(self.TEST_DIR)):
             path = os.path.join(self.TEST_DIR, img)
-            img_num = img.split('.')[0]
+            img_num = img.split('_')[-3]
             img = cv2.resize(cv2.imread(path, cv2.IMREAD_GRAYSCALE), (self.IMG_SIZE, self.IMG_SIZE))
             testing_data.append([np.array(img), img_num])
 
