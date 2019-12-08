@@ -14,6 +14,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA
 
 # TensorFlow and tf.keras
+import os
+os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 import tensorflow as tf
 from tensorflow import keras
 
@@ -29,8 +31,8 @@ class Plant_Animal_Classifier:
         self.dir_2_list = False
         self.resize_int = resize_int
 
-        self.Pimages = dir_1
-        self.Aimages = dir_2       
+        self.dir_1 = dir_1
+        self.dir_2 = dir_2       
         
         if type(dir_1) is list:
             self.dir_1_list = True
@@ -48,9 +50,9 @@ class Plant_Animal_Classifier:
         self.model.save(filename)
     
     
-    def main_loop(self):
+    def main_loop(self, downsample_second_list = False):
 
-        all_samples, all_labels = self.split_categorically()
+        all_samples, all_labels = self.split_categorically(downsample_second_list)
 
         all_images, all_images_r, all_images_g, all_images_b =\
             self.create_lists(all_samples, self.resize_int)
@@ -133,7 +135,15 @@ class Plant_Animal_Classifier:
         if plot:
             for i in range(len(predictions_to_return)):
                 print(predictions_to_return[i])
-                display.display(Image.open(all_images_directory[i]))
+                imgP = Image.open(all_images_directory[i])
+                imgP = imgP.resize((50, 50), PIL.Image.ANTIALIAS)
+                prediction_as_floats = skimage.img_as_float(imgP)
+              #  display.display(Image.open(all_images_directory[i]))
+                plt.figure()
+                plt.imshow(prediction_as_floats)
+                plt.grid(False)
+                plt.show()
+
         
         return predictions_to_return
         # predictions.replace(0, typepassedin1)
@@ -220,7 +230,7 @@ class Plant_Animal_Classifier:
             temp_R = np.zeros((resize_int, resize_int))
             temp_G = np.zeros((resize_int, resize_int))
             temp_B = np.zeros((resize_int, resize_int))
-            
+
             for r in range(len(image)):
                 row = image[r]
                 for p in range(len(row)):
@@ -231,6 +241,7 @@ class Plant_Animal_Classifier:
             all_images_R.append(temp_R)
             all_images_G.append(temp_G)
             all_images_B.append(temp_B)
+            
 
         return all_images, all_images_R, all_images_G, all_images_B
 
@@ -239,58 +250,63 @@ class Plant_Animal_Classifier:
         img = img.resize((resize_int, resize_int), PIL.Image.ANTIALIAS)
         return skimage.img_as_float(img)
 
-    def split_categorically(self):
+    def split_categorically(self, downsample_second_list):
         # read in all paths into lists
         if self.dir_1_list == False:
-            all_animals = [self.Aimages + "{}".format(i) for i in os.listdir(self.Aimages)]
+            all_dir_1 = [self.dir_1 + "{}".format(i) for i in os.listdir(self.dir_1)]
+
         else:
-            all_animals = []
-            for directory in self.Aimages:
+            all_dir_1 = []
+            for directory in self.dir_1:
                 temp = [directory + "{}".format(i) for i in os.listdir(directory)]
                 for t in temp:
-                    all_animals.append(t)
+                    all_dir_1.append(t)
         
         if self.dir_2_list == False:
-            all_plants = [self.Pimages + "{}".format(i) for i in os.listdir(self.Pimages)]
+            all_dir_2 = [self.dir_2 + "{}".format(i) for i in os.listdir(self.dir_2)]
+            if downsample_second_list == True:
+                all_dir_2 = all_dir_2[:len(all_dir_1)]
         else:
-            all_plants = []
-            for directory in self.Pimages:
+            all_dir_2 = []
+            for directory in self.dir_2:
                 temp = [directory + "{}".format(i) for i in os.listdir(directory)]
+                if downsample_second_list == True:
+                    temp = temp[:len(all_dir_1)//len(self.dir_2)]
                 for t in temp:
-                    all_plants.append(t)
+                    all_dir_2.append(t)
 
         # get number of samples
-        num_samples_all_felis_catus = len(all_animals)
-        num_samples_all_populus_trichocarpa = len(all_plants)
+        num_samples_all_dir_1 = len(all_dir_1)
+        num_samples_all_dir_2 = len(all_dir_2)
 
         # create labels
-        populus_trichocarpa_labels = [0] * num_samples_all_populus_trichocarpa
-        felis_catus_labels = [1] * num_samples_all_felis_catus
+        dir_2_labels = [0] * num_samples_all_dir_2
+        dir_1_labels = [1] * num_samples_all_dir_1
 
         # combine the datasets
-        all_samples = all_animals + all_plants
-        all_labels = felis_catus_labels + populus_trichocarpa_labels
+        all_samples = all_dir_1 + all_dir_2
+        all_labels = dir_1_labels + dir_2_labels
 
         # shuffle the data and labels in the same way
         combined_samples_and_lists = list(zip(all_samples, all_labels))
         random.shuffle(combined_samples_and_lists)
         all_samples, all_labels = zip(*combined_samples_and_lists)
 
-   #     self.split_rgb(all_animals, all_plants)
+     #   self.split_rgb(all_dir_1, all_dir_2)
         return all_samples, all_labels
 
-    def split_rgb(self, all_animals, all_plants):
+    def split_rgb(self, all_dir_1, all_dir_2):
         # split images into R, G, B floats
         resize_int = 50
         # randomly choose a picture from given directory to show
-        imgAInt = random.randint(0, len(all_animals))
-        imgBInt = random.randint(0, len(all_plants))
+        imgAInt = random.randint(0, len(all_dir_1))
+        imgBInt = random.randint(0, len(all_dir_2))
 
-        imgA = Image.open(all_animals[imgAInt])
+        imgA = Image.open(all_dir_1[imgAInt])
         imgA = imgA.resize((resize_int, resize_int), PIL.Image.ANTIALIAS)
         animal_zero_as_floats = skimage.img_as_float(imgA)
 
-        imgP = Image.open(all_plants[imgBInt])
+        imgP = Image.open(all_dir_2[imgBInt])
         imgP = imgP.resize((resize_int, resize_int), PIL.Image.ANTIALIAS)
         plant_zero_as_floats = skimage.img_as_float(imgP)
 
