@@ -25,7 +25,7 @@ import matplotlib.pyplot as plt
 
 
 class Plant_Animal_Classifier:
-    def __init__(self, classnames, dir_1, dir_2, resize_int=50):
+    def __init__(self, classnames, dir_1, dir_2, resize_int=48):
         self.classnames = classnames
         self.dir_1_list = False
         self.dir_2_list = False
