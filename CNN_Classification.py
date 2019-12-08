@@ -66,7 +66,7 @@ class CNN_Classification:
 
         self.plot_figures()
 
-        testing_data = self.process_test_data()
+        
 
     def move_to_folders(self):
         classnames = self.classnames
