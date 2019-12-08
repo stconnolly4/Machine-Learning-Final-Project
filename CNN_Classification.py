@@ -25,8 +25,11 @@ class CNN_Classification:
         self.dir_2_list = False
         self.model = None
 
-        self.TRAIN_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN\\"
-        self.TEST_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST\\"
+        self.TRAIN_DIR = "C:\\Users\\samic\\Documents\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST"
+        self.TEST_DIR = "C:\\Users\\samic\\Documents\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN"
+
+ #       self.TRAIN_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN\\"
+ #       self.TEST_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST\\"
 
         if type(dir1) is list:
             self.dir_1_list = True
@@ -62,17 +65,28 @@ class CNN_Classification:
         testing_data = self.process_test_data()
 
     def move_to_folders(self):
-        class_chicken = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\gallina\\"
-        class_dog = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\cane\\"
-        class_kitty = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\gatto\\"
-        class_elephant = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\elefante\\"
-        class_horse = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\cavallo\\"
-        class_sheep = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\pecora\\"
-        class_squirrell = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\scoitattolo\\"
-        class_mrmrscow = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\mucca\\"
+#        class_chicken = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\gallina\\"
+#        class_dog = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\cane\\"
+#        class_kitty = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\gatto\\"
+#        class_elephant = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\elefante\\"
+#        class_horse = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\cavallo\\"
+#        class_sheep = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\pecora\\"
+#        class_squirrell = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\scoitattolo\\"
+#        class_mrmrscow = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\mucca\\"
+#
+        populus_trichocarpa_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\populus_trichocarpa\\"
+        oryza_sativa_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\oryza_sativa\\"
+        vitis_vinifera_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\vitis_vinifera\\"
+        arabidopsis_thaliana_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\arabidopsis_thaliana\\"
+        carica_papaya_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\carica_papaya\\"
+        selaginella_moellendorffii_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\selaginella_moellendorffii\\"
+        medicago_truncatula_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\medicago_truncatula\\"
+        sorghum_bicolor_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\sorghum_bicolor\\"
 
-        classnames = ["chicken", "dog", "cat", "elephant", "horse", "sheep", "squirrell", "cow"]
-        sources = [class_chicken, class_dog, class_kitty, class_elephant, class_horse, class_sheep, class_squirrell, class_mrmrscow]
+     #   classnames = ["chicken", "dog", "cat", "elephant", "horse", "sheep", "squirrell", "cow"]
+     #   sources = [class_chicken, class_dog, class_kitty, class_elephant, class_horse, class_sheep, class_squirrell, class_mrmrscow]
+         classnames = ["populus", "oryza", "vitis", "arabidopsis", "carica", "selaginella", "medicago", "sorghum"]
+         sources = [populus_trichocarpa_dir, oryza_sativa_dir, vitis_vinifera_dir, arabidopsis_thaliana_dir, carica_papaya_dir, selaginella_moellendorffii_dir, medicago_truncatula_dir, sorghum_bicolor_dir]
 
         src_class1 = ""
         src_class2 = ""
@@ -84,8 +98,8 @@ class CNN_Classification:
 
 
 
-        dest_TEST = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST\\"
-        dest_TRAIN = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN\\"
+        dest_TEST = self.TEST_DIR
+        dest_TRAIN = self.TRAIN_DIR
 
         lenfolder1 = len([name for name in os.listdir(src_class1) if os.path.isfile(os.path.join(src_class1, name))])
         lenfolder2 = len([name for name in os.listdir(src_class2) if os.path.isfile(os.path.join(src_class2, name))])

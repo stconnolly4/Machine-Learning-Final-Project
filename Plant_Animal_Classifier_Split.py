@@ -6,26 +6,30 @@ import PIL
 from PIL import Image
 import IPython.display as display
 import skimage
-# import io
 import random
 import numpy as np
 # import sklearn
 from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA
-
-# TensorFlow and tf.keras
-import os
 os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 import tensorflow as tf
 from tensorflow import keras
-
-# Helper libraries
-import numpy as np
+#import numpy as np
 import matplotlib.pyplot as plt
+import cv2
+import tflearn
+#import shutil
+#import math
+#from random import shuffle
+#from tqdm import tqdm
+from tflearn.layers.conv import conv_2d, max_pool_2d
+from tflearn.layers.core import input_data, dropout, fully_connected
+from tflearn.layers.estimator import regression
+#import tf.contrib
 
 
 class Plant_Animal_Classifier:
-    def __init__(self, classnames, dir_1, dir_2, resize_int=48):
+    def __init__(self, classnames, dir_1, dir_2, resize_int=43):
         self.classnames = classnames
         self.dir_1_list = False
         self.dir_2_list = False
@@ -41,6 +45,7 @@ class Plant_Animal_Classifier:
             self.dir_2_list = True
         
         self.model = None
+        self.CNN_model = None
         self.pca_R = None
         self.pca_G = None
         self.pca_B = None
@@ -49,6 +54,101 @@ class Plant_Animal_Classifier:
         # np.save(filename, self.model)
         self.model.save(filename)
     
+    def main_loop_cnn(self, downsample_second_list = False):
+        LR = 1e-6
+        MODEL_NAME = 'CNN-{}-{}.model'.format(LR, '6conv')
+        
+        all_samples_temp, all_labels = self.split_categorically(downsample_second_list)
+        
+        all_samples = []
+        for sample in all_samples_temp:
+            img = cv2.resize(cv2.imread(sample, cv2.IMREAD_GRAYSCALE), (self.resize_int, self.resize_int))
+            all_samples.append(np.array(img))
+
+        
+        X_train, X_test, Y, test_y = train_test_split(all_samples, all_labels, test_size=0.2)
+        self.CNN_model = self.neural_net_architecture(LR)
+
+        X = np.array([i for i in X_train]).reshape(-1, self.resize_int, self.resize_int, 1)
+        print(Y[0])
+        test_x = np.array([i for i in X_test]).reshape(-1, self.resize_int, self.resize_int, 1)
+
+        # Train the network
+        self.CNN_model.fit({'input': X}, {'targets': Y}, n_epoch=10, validation_set=({'input': test_x}, {'targets': test_y}),
+                  snapshot_step=None, show_metric=True, run_id=MODEL_NAME)
+
+        self.CNN_model.save(MODEL_NAME)
+
+       # self.plot_figures()
+
+#    def plot_figures(self):
+#        # if you don't have this file yet
+#        test_data = self.process_test_data()
+#        # if you already have it
+#        #test_data = np.load('test_data.npy', allow_pickle=True)
+#
+#        fig = plt.figure()
+#
+#        for num, data in enumerate(test_data[:12]):
+#            # cat : [1,0]
+#            # dog : [0,1]
+#
+#            img_num = data[1]
+#            img_data = data[0]
+#
+#            y = fig.add_subplot(3, 4, num + 1)
+#            orig = img_data
+#            data = img_data.reshape(self.IMG_SIZE, self.IMG_SIZE, 1)
+#
+#            model_out = self.model.predict([data])[0]
+#
+#            if np.argmax(model_out) == 1:
+#                str_label = self.classnames[0]
+#            else:
+#                str_label = self.classnames[1]
+#
+#            y.imshow(orig, cmap='gray')
+#            plt.title(str_label)
+#            y.axes.get_xaxis().set_visible(False)
+#            y.axes.get_yaxis().set_visible(False)
+#        plt.show()
+#
+
+    def neural_net_architecture(self, LR):
+        tf.reset_default_graph()
+
+        convnet = input_data(shape=[None, self.resize_int, self.resize_int, 1], name='input')
+
+        convnet = conv_2d(convnet, 32, 2, activation='relu')
+        convnet = max_pool_2d(convnet, 2)
+
+        convnet = conv_2d(convnet, 64, 2, activation='relu')
+        convnet = max_pool_2d(convnet, 2)
+
+        convnet = conv_2d(convnet, 32, 2, activation='relu')
+        convnet = max_pool_2d(convnet, 2)
+
+        convnet = conv_2d(convnet, 64, 2, activation='relu')
+        convnet = max_pool_2d(convnet, 2)
+
+        convnet = conv_2d(convnet, 32, 2, activation='relu')
+        convnet = max_pool_2d(convnet, 2)
+
+        convnet = conv_2d(convnet, 64, 2, activation='relu')
+        convnet = max_pool_2d(convnet, 2)
+
+        convnet = fully_connected(convnet, 1024, activation='relu')
+        convnet = dropout(convnet, 0.8)
+
+        convnet = fully_connected(convnet, 2, activation='softmax')
+        convnet = regression(convnet, optimizer='adam', learning_rate=LR, loss='categorical_crossentropy',
+                             name='targets')
+
+        model = tflearn.DNN(convnet, tensorboard_dir='log')
+
+        return model
+
+
     
     def main_loop(self, downsample_second_list = False):
 
@@ -94,11 +194,11 @@ class Plant_Animal_Classifier:
                       loss='sparse_categorical_crossentropy',
                       metrics=['accuracy'])
 
-        histroy = self.model.fit(np.array(X_train), np.array(train_labels), epochs=10, validation_split=0.2)
+        history = self.model.fit(np.array(X_train), np.array(train_labels), epochs=10, validation_split=0.2)
 
         test_loss, test_acc = self.model.evaluate(np.array(X_test), np.array(test_labels), verbose=2)
 
-        return test_loss, test_acc, histroy
+        return test_loss, test_acc, history
     
     
     def return_classifier(self):

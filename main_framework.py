@@ -5,7 +5,11 @@ Created on Sun Nov 10 13:01:56 2019
 @author: samic
 """
 from Plant_Animal_Classifier_Split import Plant_Animal_Classifier
+#from CNN_Classification import CNN_Classification
 import numpy as np
+
+
+#CNN_Classification({0: "monocot", 1: "dicot"}, monocots_dir, dicots_dir)
 
 
 
@@ -42,7 +46,9 @@ dicots_dir = [medicago_truncatula_dir, carica_papaya_dir, arabidopsis_thaliana_d
 
 # classifiers
 lycophytes_nonlycophytes = Plant_Animal_Classifier({0: "lycophyte", 1: "non-lycophyte"}, lycophytes_dir, nonlycophytes_dir)
-lycophytes_nonlycophytes.main_loop(True)
+#lycophytes_nonlycophytes.main_loop(True)
+lycophytes_nonlycophytes.main_loop_cnn(True)
+
 
 monocot_dicot = Plant_Animal_Classifier({0: "monocot", 1: "dicot"}, monocots_dir, dicots_dir)
 monocot_dicot.main_loop(True)
