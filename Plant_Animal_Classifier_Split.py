@@ -65,12 +65,23 @@ class Plant_Animal_Classifier:
 
         X_train, X_test = self.create_test_train_lists(X_train_R, X_train_G, X_train_B, X_test_R, X_test_G, X_test_B)
 
-        test_loss, test_acc = self.train_compile_model(X_train, X_test, train_labels, test_labels)
+        test_loss, test_acc, history = self.train_compile_model(X_train, X_test, train_labels, test_labels)
+
+        self.plotLosses(history)
 
         self.get_results(test_loss, test_acc)
 
     def get_results(self, test_lost, test_acc):
         print('\nTest accuracy:', test_acc)
+
+    def plotLosses(self, history):
+        plt.plot(history.history['loss'])
+        plt.plot(history.history['val_loss'])
+        plt.title('model loss')
+        plt.ylabel('loss')
+        plt.xlabel('epoch')
+        plt.legend(['train', 'validation'], loc='upper left')
+        plt.show()
 
     def train_compile_model(self, X_train, X_test, train_labels, test_labels):
         # train model
@@ -83,11 +94,11 @@ class Plant_Animal_Classifier:
                       loss='sparse_categorical_crossentropy',
                       metrics=['accuracy'])
 
-        self.model.fit(np.array(X_train), np.array(train_labels), epochs=10)
+        histroy = self.model.fit(np.array(X_train), np.array(train_labels), epochs=10, validation_split=0.2)
 
         test_loss, test_acc = self.model.evaluate(np.array(X_test), np.array(test_labels), verbose=2)
 
-        return test_loss, test_acc
+        return test_loss, test_acc, histroy
     
     
     def return_classifier(self):
