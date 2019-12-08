@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 import os
 import tflearn
+import shutil
+import math
 import matplotlib.pyplot as plt
 from random import shuffle
 from tqdm import tqdm
@@ -72,22 +74,48 @@ class CNN_Classification:
         classnames = ["chicken", "dog", "cat", "elephant", "horse", "sheep", "squirrell", "cow"]
         sources = [class_chicken, class_dog, class_kitty, class_elephant, class_horse, class_sheep, class_squirrell, class_mrmrscow]
 
-        for i in range(len(8)):
+        src_class1 = ""
+        src_class2 = ""
+        for i in range(8):
             if self.classnames[0] == classnames[i]:
                 src_class1 = sources[i]
             if self.classnames[1] == classnames[i]:
                 src_class2 = sources[i]
 
 
+
         dest_TEST = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST\\"
         dest_TRAIN = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN\\"
 
-        src_class1 = ""
-        src_class2 = ""
+        lenfolder1 = len([name for name in os.listdir(src_class1) if os.path.isfile(os.path.join(src_class1, name))])
+        lenfolder2 = len([name for name in os.listdir(src_class2) if os.path.isfile(os.path.join(src_class2, name))])
 
+        folder1 = [src_class1 + "{}".format(i) for i in os.listdir(src_class1)]
+        folder2 = [src_class2 + "{}".format(i) for i in os.listdir(src_class2)]
 
-        src_TEST = []
-        SRC_TRAIN = []
+        trainnum1 = math.floor(lenfolder1*.8)
+        testnum1 = lenfolder1 - trainnum1
+        trainnum2 = math.floor(lenfolder2*.8)
+        testnum2 = lenfolder2 - trainnum2
+
+        # place 80% of images into dest_train
+        for i in range(int(trainnum1)):
+            src = folder1[i]
+            shutil.copy(src, dest_TRAIN)
+
+        for i in range(int(trainnum2)):
+            src = folder2[i]
+            shutil.copy(src, dest_TRAIN)
+
+        # place remaining 20% of images into dest_test
+        for i in range(int(trainnum1),int(testnum1)):
+            src = folder1[i]
+            shutil.copy(src, dest_TEST)
+
+        for i in range(int(trainnum2), int(testnum2)):
+            src = folder2[i]
+            shutil.copy(src, dest_TEST)
+
 
 
 
