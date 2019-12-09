@@ -10,7 +10,8 @@ from tqdm import tqdm
 from tflearn.layers.conv import conv_2d, max_pool_2d
 from tflearn.layers.core import input_data, dropout, fully_connected
 from tflearn.layers.estimator import regression
-
+import sklearn
+from sklearn.metrics import accuracy_score
 import tensorflow as tf
 
 
@@ -58,8 +59,16 @@ class CNN_Classification:
         self.model = model
 
         # Train the network
-        self.model.fit({'input': X}, {'targets': Y}, n_epoch=10, validation_set=({'input': test_x}, {'targets': test_y}),
-                       show_metric=True, run_id=MODEL_NAME)
+#        self.model.fit({'input': X}, {'targets': Y}, n_epoch=10, validation_set=({'input': test_x}, {'targets': test_y}),
+#                       show_metric=True, run_id=MODEL_NAME)
+        self.model.fit({'input': X}, {'targets': Y}, n_epoch=10, show_metric=True, run_id=MODEL_NAME)
+        
+        predicted_y_temp = self.model.predict(test_x)
+        predicted_y = np.argmax(predicted_y_temp, axis = 1)
+        actual_y = np.argmax(test_y, axis = 1)
+        test_accuracy = accuracy_score(predicted_y, actual_y)
+
+        print("Test accuracy: ", test_accuracy)
         # tensorboard --logdir="C:\Users\djenz\OneDrive - University of Vermont\Machine-Learning-Final-Project\CNN TUT\log"
         self.model.save(MODEL_NAME)
 
