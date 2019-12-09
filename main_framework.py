@@ -18,36 +18,47 @@ import numpy as np
 # train classifier
 # felis_catus_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\felis_catus\\"
 # canis_familiaris_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\canis_familiaris\\"
-# populus_trichocarpa_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\populus_trichocarpa\\"
-# oryza_sativa_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\oryza_sativa\\"
-# vitis_vinifera_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\vitis_vinifera\\"
-# arabidopsis_thaliana_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\arabidopsis_thaliana\\"
-# carica_papaya_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\carica_papaya\\"
-# selaginella_moellendorffii_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\selaginella_moellendorffii\\"
-# medicago_truncatula_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\medicago_truncatula\\"
-# sorghum_bicolor_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\sorghum_bicolor\\"
+populus_trichocarpa_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\populus_trichocarpa\\"
+oryza_sativa_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\oryza_sativa\\"
+vitis_vinifera_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\vitis_vinifera\\"
+arabidopsis_thaliana_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\arabidopsis_thaliana\\"
+carica_papaya_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\carica_papaya\\"
+selaginella_moellendorffii_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\selaginella_moellendorffii\\"
+medicago_truncatula_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\medicago_truncatula\\"
+sorghum_bicolor_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\sorghum_bicolor\\"
+lycophytes_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\Lycophytes\\"
+non_lycophytes_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\Non-Lycophytes\\"
+monocots_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\Monocots\\"
+dicots_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\Dicots\\"
+dicot_1_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\Dicot1\\"
+dicot_2_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\Dicot2\\"
+non_vitis_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\Non-Vitis\\"
+plants_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\plants\\"
 
-populus_trichocarpa_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\populus_trichocarpa\\"
-oryza_sativa_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\oryza_sativa\\"
-vitis_vinifera_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\vitis_vinifera\\"
-arabidopsis_thaliana_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\arabidopsis_thaliana\\"
-carica_papaya_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\carica_papaya\\"
-selaginella_moellendorffii_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\selaginella_moellendorffii\\"
-medicago_truncatula_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\medicago_truncatula\\"
-sorghum_bicolor_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\sorghum_bicolor\\"
-lycophytes_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Lycophytes\\"
-non_lycophytes_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Non-Lycophytes\\"
-monocots_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Monocots\\"
-dicots_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Dicots\\"
-dicot_1_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Dicot1\\"
-dicot_2_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Dicot2\\"
-non_vitis_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Non-Vitis\\"
-plants_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\plants\\"
 
-felis_catus_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\gatto\\"
-felis_catus_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\felis_catus\\"
-canis_familiaris_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\cane\\"
-canis_familiaris_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\canis_familiaris\\"
+
+
+#populus_trichocarpa_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\populus_trichocarpa\\"
+#oryza_sativa_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\oryza_sativa\\"
+#vitis_vinifera_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\vitis_vinifera\\"
+#arabidopsis_thaliana_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\arabidopsis_thaliana\\"
+#carica_papaya_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\carica_papaya\\"
+#selaginella_moellendorffii_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\selaginella_moellendorffii\\"
+#medicago_truncatula_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\medicago_truncatula\\"
+#sorghum_bicolor_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\sorghum_bicolor\\"
+#lycophytes_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Lycophytes\\"
+#non_lycophytes_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Non-Lycophytes\\"
+#monocots_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Monocots\\"
+#dicots_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Dicots\\"
+#dicot_1_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Dicot1\\"
+#dicot_2_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Dicot2\\"
+#non_vitis_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Non-Vitis\\"
+#plants_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\plants\\"
+#
+#felis_catus_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\gatto\\"
+#felis_catus_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\felis_catus\\"
+#canis_familiaris_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\cane\\"
+#canis_familiaris_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\canis_familiaris\\"
 
 
 
@@ -62,43 +73,47 @@ canis_familiaris_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Mach
 # dicots_dir = [medicago_truncatula_dir, carica_papaya_dir, arabidopsis_thaliana_dir, populus_trichocarpa_dir, vitis_vinifera_dir]
 
 # classifiers
+
+#lycophytes_nonlycophytes = CNN_Classification({0: "lycophyte", 1: "non-lycophyte"}, lycophytes_dir, non_lycophytes_dir)
+#lycophytes_nonlycophytes.main_loop()
 # lycophytes_nonlycophytes = Plant_Animal_Classifier({0: "lycophyte", 1: "non-lycophyte"}, lycophytes_dir, nonlycophytes_dir)
 # #lycophytes_nonlycophytes.main_loop(True)
-# lycophytes_nonlycophytes.main_loop(True)
-
-# classifiers
-# lycophytes_nonlycophytes = CNN_Classification({0: "lycophyte", 1: "non-lycophyte"}, lycophytes_dir, non_lycophytes_dir)
-# #lycophytes_nonlycophytes.main_loop(True)
-# lycophytes_nonlycophytes.main_loop()
-
 
 # monocot_dicot = Plant_Animal_Classifier({0: "monocot", 1: "dicot"}, monocots_dir, dicots_dir)
 # monocot_dicot.main_loop(True)
-
-# # classifiers
-monocot_dicot = CNN_Classification({0: "monocot", 1: "dicot"}, monocots_dir, dicots_dir)
-#lycophytes_nonlycophytes.main_loop(True)
-monocot_dicot.main_loop()
+#monocot_dicot = CNN_Classification(["monocot", "dicot"], monocots_dir, dicots_dir)
+#monocot_dicot.main_loop()
 
 # within monocots
-oryza_sorghum =  Plant_Animal_Classifier({0: "oryza", 1: "sorghum"}, oryza_sativa_dir, sorghum_bicolor_dir)
-oryza_sorghum.main_loop(True)
+#oryza_sorghum =  Plant_Animal_Classifier({0: "oryza", 1: "sorghum"}, oryza_sativa_dir, sorghum_bicolor_dir)
+#oryza_sorghum.main_loop(True)
+#oryza_sorghum =  CNN_Classification({0: "oryza", 1: "sorghum"}, oryza_sativa_dir, sorghum_bicolor_dir)
+#oryza_sorghum.main_loop()
+
 
 # within dicots
 # nonvitis_dir = [medicago_truncatula_dir, carica_papaya_dir, arabidopsis_thaliana_dir, populus_trichocarpa_dir]
-vitis_nonvitis = Plant_Animal_Classifier({0: "vitis", 1: "non-vitis"}, vitis_vinifera_dir, non_vitis_dir)
-vitis_nonvitis.main_loop(True)
+#vitis_nonvitis = Plant_Animal_Classifier({0: "vitis", 1: "non-vitis"}, vitis_vinifera_dir, non_vitis_dir)
+#vitis_nonvitis.main_loop(True)
+vitis_nonvitis = CNN_Classification({0: "vitis", 1: "non-vitis"}, vitis_vinifera_dir, non_vitis_dir)
+vitis_nonvitis.main_loop()
 
 # dicot_1_dir = [carica_papaya_dir, arabidopsis_thaliana_dir]
 # dicot_2_dir = [medicago_truncatula_dir, populus_trichocarpa_dir]
-dicot1_dicot2 = Plant_Animal_Classifier({0: "dicot1", 1: "dicot2"}, dicot_1_dir, dicot_2_dir)
-dicot1_dicot2.main_loop(True)
+#dicot1_dicot2 = Plant_Animal_Classifier({0: "dicot1", 1: "dicot2"}, dicot_1_dir, dicot_2_dir)
+#dicot1_dicot2.main_loop(True)
+#dicot1_dicot2 = CNN_Classification({0: "dicot1", 1: "dicot2"}, dicot_1_dir, dicot_2_dir)
+#dicot1_dicot2.main_loop()
 
-arabidopsis_carica = Plant_Animal_Classifier({0: "arabidopsis", 1: "carica"}, arabidopsis_thaliana_dir, carica_papaya_dir)
-arabidopsis_carica.main_loop(True)
-
-medicago_populus = Plant_Animal_Classifier({0: "medicago", 1: "populus"}, medicago_truncatula_dir, populus_trichocarpa_dir)
-medicago_populus.main_loop(True)
+#arabidopsis_carica = Plant_Animal_Classifier({0: "arabidopsis", 1: "carica"}, arabidopsis_thaliana_dir, carica_papaya_dir)
+#arabidopsis_carica.main_loop(True)
+#arabidopsis_carica = CNN_Classification({0: "arabidopsis", 1: "carica"}, arabidopsis_thaliana_dir, carica_papaya_dir)
+#arabidopsis_carica.main_loop()
+#
+#medicago_populus = Plant_Animal_Classifier({0: "medicago", 1: "populus"}, medicago_truncatula_dir, populus_trichocarpa_dir)
+#medicago_populus.main_loop(True)
+medicago_populus = CNN_Classification({0: "medicago", 1: "populus"}, medicago_truncatula_dir, populus_trichocarpa_dir)
+medicago_populus.main_loop()
 
 
 animals_dir = [felis_catus_dir, canis_familiaris_dir]

@@ -25,11 +25,11 @@ class CNN_Classification:
         self.dir_2_list = False
         self.model = None
         #
-        # self.TRAIN_DIR = "C:\\Users\\samic\\Documents\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST"
-        # self.TEST_DIR = "C:\\Users\\samic\\Documents\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN"
+        self.TRAIN_DIR = "C:\\Users\\samic\\Documents\\ML-final-project\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN"
+        self.TEST_DIR = "C:\\Users\\samic\\Documents\\ML-final-project\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST-"+str(self.classnames[0]+"\\")
 
-        self.TRAIN_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN\\"
-        self.TEST_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST-"+str(self.classnames[0]+"\\")
+      #  self.TRAIN_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN\\"
+      #  self.TEST_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST-"+str(self.classnames[0]+"\\")
 
         if type(dir1) is list:
             self.dir_1_list = True
@@ -128,15 +128,15 @@ class CNN_Classification:
             # cat : [1,0]
             # dog : [0,1]
 
-            img_num = data[1]
+      #      img_num = data[1]
             img_data = data[0]
             y = fig.add_subplot(5, 5, num + 1)
             orig = img_data
-            data = img_data.reshape(self.IMG_SIZE, self.IMG_SIZE, 1)
+            data_reshaped = img_data.reshape(self.IMG_SIZE, self.IMG_SIZE, 1)
 
-            model_out = self.model.predict([data])[0]
-
-            if np.argmax(model_out) == 1:
+            model_out = self.model.predict([data_reshaped])[0]
+            
+            if np.argmax(model_out) == 0:
                 str_label = self.classnames[0][:5]
             else:
                 str_label = self.classnames[1][:5]
@@ -156,6 +156,11 @@ class CNN_Classification:
             classnames_in = ["arabidopsis", "carica", "medicago", "populus", "vitis"]
         if self.classnames[0] == "oryza":
             classnames_in = ["sorghum"]
+        if self.classnames[0] == "dicot1":
+            classnames_in = ["populus", "medicago"]
+        else:
+            classnames_in = [word_label]
+            
         for i in classnames_in:
             # print(word_label)
             if word_label == str(i):
