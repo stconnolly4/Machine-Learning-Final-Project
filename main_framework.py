@@ -41,7 +41,7 @@ monocots_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Lear
 dicots_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Dicots\\"
 dicot_1_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Dicot1\\"
 dicot_2_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Dicot2\\"
-non_vitis_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Non-Vitas\\"
+non_vitis_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\Non-Vitis\\"
 plants_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\plants\\plants\\"
 
 felis_catus_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\animals\\gatto\\"
@@ -75,7 +75,7 @@ canis_familiaris_dir = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Mach
 # monocot_dicot = Plant_Animal_Classifier({0: "monocot", 1: "dicot"}, monocots_dir, dicots_dir)
 # monocot_dicot.main_loop(True)
 
-# classifiers
+# # classifiers
 monocot_dicot = CNN_Classification({0: "monocot", 1: "dicot"}, monocots_dir, dicots_dir)
 #lycophytes_nonlycophytes.main_loop(True)
 monocot_dicot.main_loop()
@@ -119,8 +119,8 @@ plant_animal.main_loop()
 
 
 # run the classifier on a specific images
-testing_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\testing_images\\"
-#testing_dir = "C:\\Users\\djenz\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\testing_images\\"
+# testing_dir = "C:\\Users\\samic\\Documents\\Photos for Machine Learning\\testing_images\\"
+testing_dir = "C:\\Users\\djenz\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\testing_images\\"
 
 predictions = plant_animal.predict_using_trained_model(testing_dir, plot=True)
 #

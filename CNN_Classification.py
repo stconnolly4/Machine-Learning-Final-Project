@@ -29,7 +29,7 @@ class CNN_Classification:
         # self.TEST_DIR = "C:\\Users\\samic\\Documents\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN"
 
         self.TRAIN_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN\\"
-        self.TEST_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST\\"
+        self.TEST_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST-"+str(self.classnames[0]+"\\")
 
         if type(dir1) is list:
             self.dir_1_list = True
@@ -45,10 +45,8 @@ class CNN_Classification:
         MODEL_NAME = 'CNN-{}-vs-{}.model'.format(self.classnames[0], self.classnames[1])
         train_data = self.use_train_data()
         model = self.neural_net_architecture(LR)
+        # #print(model)
         self.model = model
-
-
-
 
         train = train_data[:-20]
         test = train_data[-20:]
@@ -57,6 +55,7 @@ class CNN_Classification:
 
         test_x = np.array([i[0] for i in test]).reshape(-1, self.IMG_SIZE, self.IMG_SIZE, 1)
         test_y = [i[1] for i in test]
+        self.model = model
 
         # Train the network
         self.model.fit({'input': X}, {'targets': Y}, n_epoch=10, validation_set=({'input': test_x}, {'targets': test_y}),
@@ -69,6 +68,14 @@ class CNN_Classification:
 
 
     def move_to_folders(self):
+        files = []
+        # r=root, d=directories, f = files
+        for r, d, f in os.walk(self.TRAIN_DIR):
+            for file in f:
+                files.append(os.path.join(r, file))
+        for i in range(len(files)):
+            os.remove(str(files[i]))
+
         classnames = self.classnames
         src_class1 = self.class1images
         src_class2 = self.class2images
@@ -147,9 +154,10 @@ class CNN_Classification:
             classnames_in = ["arabidopsis", "carica", "medicago", "populus", "vitis", "oryza", "sorghum"]
         if self.classnames[0] == "monocot":
             classnames_in = ["arabidopsis", "carica", "medicago", "populus", "vitis"]
-
+        if self.classnames[0] == "oryza":
+            classnames_in = ["sorghum"]
         for i in classnames_in:
-            print(word_label)
+            # print(word_label)
             if word_label == str(i):
                 return [1,0]
 
@@ -162,7 +170,7 @@ class CNN_Classification:
             path = os.path.join(self.TRAIN_DIR, img)
             img = cv2.resize(cv2.imread(path, cv2.IMREAD_GRAYSCALE), (self.IMG_SIZE, self.IMG_SIZE))
             training_data.append([np.array(img), np.array(label)])
-        print(label)
+        # print(label)
         shuffle(training_data)
         np.save('train_data.npy', training_data)
         return training_data
@@ -199,22 +207,13 @@ class CNN_Classification:
         convnet = conv_2d(convnet, 32, 2, activation='relu')
         convnet = max_pool_2d(convnet, 2)
 
-        convnet = conv_2d(convnet, 64, 2, activation='relu')
-        convnet = max_pool_2d(convnet, 2)
-
-        convnet = conv_2d(convnet, 32, 2, activation='relu')
-        convnet = max_pool_2d(convnet, 2)
-
-        convnet = conv_2d(convnet, 64, 2, activation='relu')
-        convnet = max_pool_2d(convnet, 2)
 
         convnet = fully_connected(convnet, 1024, activation='relu')
         convnet = dropout(convnet, 0.8)
 
         convnet = fully_connected(convnet, 2, activation='softmax')
-        convnet = regression(convnet, optimizer='adam', learning_rate=LR, loss='categorical_crossentropy',
-                             name='targets')
-
+        convnet = regression(convnet, optimizer='adam', batch_size=8, learning_rate=LR, loss='binary_crossentropy', name='targets')
+        #tensorboard --logdir="C:\Users\djenz\OneDrive - University of Vermont\Machine-Learning-Final-Project\log"
         model = tflearn.DNN(convnet, tensorboard_dir='log')
 
         return model
