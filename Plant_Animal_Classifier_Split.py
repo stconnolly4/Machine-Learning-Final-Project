@@ -180,12 +180,13 @@ class Plant_Animal_Classifier:
         print('\nTest accuracy:', test_acc)
 
     def plotLosses(self, history):
-        plt.plot(history.history['loss'])
-        plt.plot(history.history['val_loss'])
-        plt.title('model loss')
-        plt.ylabel('loss')
+        plt.plot(history.history['acc'])
+        # plt.plot(history.history['loss'])
+        # plt.plot(history.history['val_loss'])
+        plt.title('model acc')
+        plt.ylabel('acc')
         plt.xlabel('epoch')
-        plt.legend(['train', 'validation'], loc='upper left')
+        plt.legend(['train'], loc='upper left')
         plt.show()
 
     def train_compile_model(self, X_train, X_test, train_labels, test_labels):
@@ -244,9 +245,9 @@ class Plant_Animal_Classifier:
         predictions_to_return = []
         for p in predictions:
             if p == 0:
-               predictions_to_return.append(self.classnames[0])
+               predictions_to_return.append(self.classnames[1])
             else:
-                predictions_to_return.append(self.classnames[1])
+                predictions_to_return.append(self.classnames[0])
                 
         if plot:
             for i in range(len(predictions_to_return)):

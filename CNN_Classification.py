@@ -26,11 +26,11 @@ class CNN_Classification:
         self.dir_2_list = False
         self.model = None
         #
-        self.TRAIN_DIR = "C:\\Users\\samic\\Documents\\ML-final-project\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN"
-        self.TEST_DIR = "C:\\Users\\samic\\Documents\\ML-final-project\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST-"+str(self.classnames[0]+"\\")
+        # self.TRAIN_DIR = "C:\\Users\\samic\\Documents\\ML-final-project\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN"
+        # self.TEST_DIR = "C:\\Users\\samic\\Documents\\ML-final-project\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST-"+str(self.classnames[0]+"\\")
 
-      #  self.TRAIN_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN\\"
-      #  self.TEST_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST-"+str(self.classnames[0]+"\\")
+        self.TRAIN_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TRAIN\\"
+        self.TEST_DIR = "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN_TRAIN_TEST\\TEST-"+str(self.classnames[0]+"\\")
 
         if type(dir1) is list:
             self.dir_1_list = True
@@ -46,11 +46,12 @@ class CNN_Classification:
         MODEL_NAME = 'CNN-{}-vs-{}.model'.format(self.classnames[0], self.classnames[1])
         train_data = self.use_train_data()
         model = self.neural_net_architecture(LR)
+
         # #print(model)
         self.model = model
 
-        train = train_data[:-20]
-        test = train_data[-20:]
+        train = train_data[:-500]
+        test = train_data[-500:]
         X = np.array([i[0] for i in train]).reshape(-1, self.IMG_SIZE, self.IMG_SIZE, 1)
         Y = [i[1] for i in train]
 
@@ -69,7 +70,7 @@ class CNN_Classification:
         test_accuracy = accuracy_score(predicted_y, actual_y)
 
         print("Test accuracy: ", test_accuracy)
-        # tensorboard --logdir="C:\Users\djenz\OneDrive - University of Vermont\Machine-Learning-Final-Project\CNN TUT\log"
+        # tensorboard --logdir="C:\Users\djenz\OneDrive - University of Vermont\Machine-Learning-Final-Project\log"
         self.model.save(MODEL_NAME)
 
         self.plot_figures()
@@ -82,8 +83,12 @@ class CNN_Classification:
         for r, d, f in os.walk(self.TRAIN_DIR):
             for file in f:
                 files.append(os.path.join(r, file))
+        # for i in range(len(files)):
+        #     print(str(files[i]))
         for i in range(len(files)):
             os.remove(str(files[i]))
+        # for i in range(len(files)):
+        #     print(str(files[i]))
 
         classnames = self.classnames
         src_class1 = self.class1images
@@ -167,16 +172,22 @@ class CNN_Classification:
             classnames_in = ["sorghum"]
         if self.classnames[0] == "dicot1":
             classnames_in = ["populus", "medicago"]
-        else:
-            classnames_in = [word_label]
-            
-        for i in classnames_in:
-            # print(word_label)
-            if word_label == str(i):
-                return [1,0]
+        if self.classnames[0] == "canis":
+            classnames_in = ["felis"]
 
-        return [0,1]
+        # # print(classnames_in)
+        # for i in classnames_in:
+        #     # print(word_label)
+        #     if word_label == str(i):
+        #         classif = [1,0]
+        #         # print(classif)
+        #         return [1,0]
+        # classif = [0,1]
+        # # print(classif)
+        # return [0,1]
 
+        if word_label == self.classnames[0]: return [0,1]
+        elif word_label != self.classnames[0]: return [1,0]
     def create_train_data(self):
         training_data = []
         for img in tqdm(os.listdir(self.TRAIN_DIR)):
@@ -221,13 +232,22 @@ class CNN_Classification:
         convnet = conv_2d(convnet, 32, 2, activation='relu')
         convnet = max_pool_2d(convnet, 2)
 
+        convnet = conv_2d(convnet, 64, 2, activation='relu')
+        convnet = max_pool_2d(convnet, 2)
+
+        convnet = conv_2d(convnet, 32, 2, activation='relu')
+        convnet = max_pool_2d(convnet, 2)
+
+        convnet = conv_2d(convnet, 64, 2, activation='relu')
+        convnet = max_pool_2d(convnet, 2)
 
         convnet = fully_connected(convnet, 1024, activation='relu')
         convnet = dropout(convnet, 0.8)
 
         convnet = fully_connected(convnet, 2, activation='softmax')
-        convnet = regression(convnet, optimizer='adam', batch_size=8, learning_rate=LR, loss='binary_crossentropy', name='targets')
-        #tensorboard --logdir="C:\Users\djenz\OneDrive - University of Vermont\Machine-Learning-Final-Project\log"
+        convnet = regression(convnet, optimizer='adam', learning_rate=LR, loss='categorical_crossentropy',
+                             name='targets')
+
         model = tflearn.DNN(convnet, tensorboard_dir='log')
 
         return model

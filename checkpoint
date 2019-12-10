@@ -1,2 +1,2 @@
-model_checkpoint_path: "C:\\Users\\samic\\Documents\\ML-final-project\\Machine-Learning-Final-Project\\CNN-medicago-vs-populus.model"
-all_model_checkpoint_paths: "C:\\Users\\samic\\Documents\\ML-final-project\\Machine-Learning-Final-Project\\CNN-medicago-vs-populus.model"
+model_checkpoint_path: "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN-gallus-vs-nongallus.model"
+all_model_checkpoint_paths: "C:\\Users\\djenz\\OneDrive - University of Vermont\\Machine-Learning-Final-Project\\CNN-gallus-vs-nongallus.model"
