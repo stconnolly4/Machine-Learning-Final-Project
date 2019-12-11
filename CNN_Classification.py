@@ -50,8 +50,8 @@ class CNN_Classification:
         # #print(model)
         self.model = model
 
-        train = train_data[:-500]
-        test = train_data[-500:]
+        train = train_data[:-500] #note, this is changed to be 80% of data
+        test = train_data[-500:] # note, this is changed to be 20% of data
         X = np.array([i[0] for i in train]).reshape(-1, self.IMG_SIZE, self.IMG_SIZE, 1)
         Y = [i[1] for i in train]
 
